@@ -19,35 +19,35 @@ Inspirados por la idea de explorar nuevos horizontes, buscamos navegar junto a n
 
 ---
 
-🎯 Misión
+## 🎯 Misión
 
 Diseñar y desarrollar aplicaciones móviles y experiencias digitales que permitan a personas y empresas convertir sus ideas en productos tecnológicos accesibles, útiles y atractivos.
 
 ---
 
-🔭 Visión
+## 🔭 Visión
 
 Convertirnos en una empresa tecnológica reconocida por la creación de aplicaciones y productos digitales innovadores que generen valor para nuestros clientes y usuarios.
 
 ---
 
-🛠️ Áreas de trabajo
+## 🛠️ Áreas de trabajo
 
-📱 Aplicaciones móviles
+### 📱 Aplicaciones móviles
 
 - Android
 - Aplicaciones de utilidad
 - MVPs
 - Herramientas para negocios
 
-🎮 Videojuegos
+### 🎮 Videojuegos
 
 - Juegos casuales
 - Juegos web
 - Prototipos
 - Experiencias interactivas
 
-💡 Soluciones digitales
+### 💡 Soluciones digitales
 
 - Productos personalizados
 - Gamificación
@@ -56,7 +56,7 @@ Convertirnos en una empresa tecnológica reconocida por la creación de aplicaci
 
 ---
 
-📂 Estructura del proyecto
+## 📂 Estructura del proyecto
 
 /
 ├── index.html
@@ -70,7 +70,7 @@ Convertirnos en una empresa tecnológica reconocida por la creación de aplicaci
 
 ---
 
-🚧 Estado actual
+## 🚧 Estado actual
 
 - [x] Dominio adquirido
 - [x] Landing page inicial
@@ -81,7 +81,7 @@ Convertirnos en una empresa tecnológica reconocida por la creación de aplicaci
 
 ---
 
-🤝 Cómo contribuir
+## 🤝 Cómo contribuir
 
 Si formas parte del equipo:
 
@@ -100,7 +100,7 @@ git push origin nueva-funcionalidad
 
 ---
 
-📬 Contacto
+## 📬 Contacto
 
 📧 hola@nerisatech.com
 
@@ -108,7 +108,7 @@ git push origin nueva-funcionalidad
 
 ---
 
-❤️ Construido por
+## ❤️ Construido por
 
 Neri + Isa
 
