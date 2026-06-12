@@ -8,7 +8,7 @@ Somos una empresa enfocada en el desarrollo de aplicaciones móviles, videojuego
 
 ---
 
-##🌊 Nuestra historia
+## 🌊 Nuestra historia
 
 Nerisa Tech nace de la unión de dos nombres:
 
