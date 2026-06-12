@@ -1,93 +1,152 @@
-export class GameScene extends Phaser.Scene {
-    constructor() {
-        super({ key: "GameScene" });
-        console.log("--> GameScene constructor");
+const config = {
+  type: Phaser.AUTO,
+  width: 390,
+  height: 700,
+  backgroundColor: '#16162a',
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH
+  },
+  scene: {
+    create
+  }
+};
+
+new Phaser.Game(config);
+
+let jugadores = [];
+let jugadorActual = 0;
+let pirinola;
+let textoTitulo;
+let textoTurno;
+let textoResultado;
+let botonGirar;
+
+const opciones = [
+  'Toma 1',
+  'Toma 2',
+  'Todos toman',
+  'Elige quién toma',
+  'Te salvaste',
+  'Reto rápido'
+];
+
+function create() {
+  const scene = this;
+
+  textoTitulo = scene.add.text(195, 60, 'Pirinola QR Party', {
+    fontSize: '28px',
+    color: '#ffffff',
+    fontStyle: 'bold'
+  }).setOrigin(0.5);
+
+  textoTurno = scene.add.text(195, 120, 'Ingresa jugadores', {
+    fontSize: '20px',
+    color: '#ffffff'
+  }).setOrigin(0.5);
+
+  textoResultado = scene.add.text(195, 560, '', {
+    fontSize: '26px',
+    color: '#ffd36a',
+    fontStyle: 'bold',
+    align: 'center'
+  }).setOrigin(0.5);
+
+  crearFormularioHTML(scene);
+
+  pirinola = scene.add.container(195, 330);
+
+  const base = scene.add.triangle(0, 0, 0, 120, 80, -90, -80, -90, 0xffd36a);
+  const centro = scene.add.circle(0, 0, 16, 0xffffff);
+
+  pirinola.add([base, centro]);
+  pirinola.setVisible(false);
+
+  botonGirar = scene.add.text(195, 640, 'GIRAR', {
+    fontSize: '28px',
+    color: '#101020',
+    backgroundColor: '#ffd36a',
+    padding: { x: 35, y: 14 }
+  })
+  .setOrigin(0.5)
+  .setInteractive()
+  .setVisible(false);
+
+  botonGirar.on('pointerdown', () => girarPirinola(scene));
+}
+
+function crearFormularioHTML(scene) {
+  const div = document.createElement('div');
+
+  div.innerHTML = `
+    <div style="
+      position: absolute;
+      top: 170px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      text-align: center;
+      color: white;
+    ">
+      <input id="numJugadores" type="number" min="2" max="12" value="4"
+        style="width: 90%; padding: 12px; font-size: 18px; border-radius: 8px; border: none;" />
+      <button id="btnCrear" style="
+        margin-top: 15px;
+        padding: 12px 20px;
+        font-size: 18px;
+        border: none;
+        border-radius: 8px;
+        background: #ffd36a;
+      ">Crear partida</button>
+    </div>
+  `;
+
+  document.body.appendChild(div);
+
+  document.getElementById('btnCrear').onclick = () => {
+    const cantidad = Number(document.getElementById('numJugadores').value);
+
+    jugadores = [];
+
+    for (let i = 1; i <= cantidad; i++) {
+      jugadores.push(Jugador ${i});
     }
 
-    init(){
-        console.log("--> GameScene init");
+    div.remove();
+
+    jugadorActual = 0;
+    textoTurno.setText(Turno de ${jugadores[jugadorActual]});
+    textoResultado.setText('Toca GIRAR');
+    pirinola.setVisible(true);
+    botonGirar.setVisible(true);
+  };
+}
+
+function girarPirinola(scene) {
+  botonGirar.disableInteractive();
+  textoResultado.setText('Girando...');
+
+  const resultado = Phaser.Utils.Array.GetRandom(opciones);
+  const vueltas = Phaser.Math.Between(4, 7);
+  const anguloFinal = 360 * vueltas + Phaser.Math.Between(0, 360);
+
+  scene.tweens.add({
+    targets: pirinola,
+    angle: pirinola.angle + anguloFinal,
+    duration: 2200,
+    ease: 'Cubic.easeOut',
+    onComplete: () => {
+      textoResultado.setText(resultado);
+
+      jugadorActual++;
+
+      if (jugadorActual >= jugadores.length) {
+        jugadorActual = 0;
+      }
+
+      textoTurno.setText(Siguiente: ${jugadores[jugadorActual]});
+
+      botonGirar.setInteractive();
     }
-    
-    preload(){
-        console.log("--> GameScene preload");
-
-        this.load.image("background", "assets/background.png");
-        this.load.image("player", "assets/crop_pumpkin.png");
-        this.load.image("enemy", "assets/crop_melon.png");
-    }
-    
-    create(){
-        // Create bg image
-        const bg = this.add.image(0, 0, "background");
-
-        // change origin to the top-left corner
-        bg.setOrigin(0, 0);
-
-        this.player = this.add.image(70, 180, "player");
-        this.player.setScale(0.5);
-
-        
-        this.enemy1 = this.add.image(250, 180, "enemy");
-        this.enemy1.setRotation(Math.PI / 4);
-    }
-
-    create_2(){
-        // Create bg image
-        const bg = this.add.image(0, 0, "background");
-
-        // change origin to the top-left corner
-        bg.setOrigin(0, 0);
-
-        const player = this.add.image(70, 180, "player");
-        player.setScale(0.5);
-
-        const enemy1 = this.add.image(250, 180, "enemy");
-        //enemy1.angle = 45;
-        //enemy1.rotation = Math.PI / 4;
-        //enemy1.setRotation(Math.PI / 4);
-
-        //para que gire sobre un determinado origen
-        enemy1.setOrigin(0);
-        enemy1.setRotation(Math.PI / 4);
-    }
-
-    create_1(){
-        console.log("--> GameScene create");
-        const gameWidth = this.scale.width;
-        const gameHeight = this.scale.height;
-        console.log(`Game width: ${gameWidth}, Game height: ${gameHeight}`);
-
-        const player = this.add.image(0, 0, "player");
-        player.setPosition(gameWidth, gameHeight);
-        player.setOrigin(1, 1);
-        player.setDepth(2);
-        player.setScale(2,2);
-
-        
-        const bg = this.add.image(0, 0, "background");
-        bg.setPosition(gameWidth / 2, gameHeight / 2);
-        //bg.setOrigin(0, 0);
-
-        const enemy1 = this.add.image(250, 180, "enemy");
-        enemy1.scaleX = 2;
-        enemy1.scaleY = 2;
-
-        enemy1.flipX = true;
-        enemy1.flipY = true;
-
-        const enemy2 = this.add.image(450, 180, "enemy");
-        enemy2.displayWidth = 300;
-    }
-    
-    update(){
-        console.log("--> GameScene update");
-
-        this.enemy1.angle += 1;   
-        this.player.angle -= 1;  
-        if(this.player.scaleX < 2)
-        {
-            this.player.scaleX += 0.01;
-            this.player.scaleY += 0.01;
-        }
-    }
+  });
 }
