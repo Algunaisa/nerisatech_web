@@ -109,13 +109,13 @@ function crearFormularioHTML(scene) {
     jugadores = [];
 
     for (let i = 1; i <= cantidad; i++) {
-      jugadores.push(Jugador ${i});
+      jugadores.push(`Jugador ${i}`);
     }
 
     div.remove();
 
     jugadorActual = 0;
-    textoTurno.setText(Turno de ${jugadores[jugadorActual]});
+    textoTurno.setText(`Turno de ${jugadores[jugadorActual]}`);
     textoResultado.setText('Toca GIRAR');
     pirinola.setVisible(true);
     botonGirar.setVisible(true);
@@ -144,7 +144,7 @@ function girarPirinola(scene) {
         jugadorActual = 0;
       }
 
-      textoTurno.setText(Siguiente: ${jugadores[jugadorActual]});
+      textoTurno.setText(`Siguiente: ${jugadores[jugadorActual]}`);
 
       botonGirar.setInteractive();
     }
