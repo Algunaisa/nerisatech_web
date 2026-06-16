@@ -3,31 +3,184 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QRGame | Experiencias interactivas por QR</title>
+  <title>QRGames | Experiencias interactivas por QR</title>
   <style>
-    :root{--bg:#0d1024;--bg2:#111633;--card:rgba(29,34,71,.78);--soft:rgba(255,255,255,.06);--primary:#7cf7d4;--secondary:#ffce6b;--accent:#ff7ab6;--text:#f7f7ff;--muted:#b8bddc;--line:rgba(255,255,255,.12);--radius:24px;--shadow:0 24px 80px rgba(0,0,0,.35)}
-    *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 18% 4%,rgba(124,247,212,.22),transparent 26%),radial-gradient(circle at 88% 8%,rgba(255,122,182,.18),transparent 30%),linear-gradient(180deg,var(--bg) 0%,var(--bg2) 42%,var(--bg) 100%);color:var(--text);line-height:1.6}a{color:inherit;text-decoration:none}.container{width:min(1120px,92%);margin:0 auto}
+    :root{
+      --bg:#0d1024;
+      --bg2:#111633;
+      --card:rgba(29,34,71,.78);
+      --soft:rgba(255,255,255,.06);
+      --primary:#7cf7d4;
+      --secondary:#ffce6b;
+      --accent:#ff7ab6;
+      --text:#f7f7ff;
+      --muted:#b8bddc;
+      --line:rgba(255,255,255,.12);
+      --radius:24px;
+      --shadow:0 24px 80px rgba(0,0,0,.35)
+    }
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0
+    }
+    html{
+      scroll-behavior:smooth
+    }
+    body{
+      font-family:Arial,Helvetica,sans-serif;
+      background:radial-gradient(circle at 18% 4%,rgba(124,247,212,.22),transparent 26%),radial-gradient(circle at 88% 8%,rgba(255,122,182,.18),transparent 30%),linear-gradient(180deg,var(--bg) 0%,var(--bg2) 42%,var(--bg) 100%);color:var(--text);line-height:1.6}a{color:inherit;text-decoration:none}.container{width:min(1120px,92%);margin:0 auto}
     header{position:sticky;top:0;z-index:20;backdrop-filter:blur(18px);background:rgba(13,16,36,.78);border-bottom:1px solid var(--line)}.nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0;gap:20px}.brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:-.03em}.brand-mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--secondary),var(--accent));color:#0d1024;display:grid;place-items:center;font-weight:900}.nav-links{display:flex;gap:20px;color:var(--muted);font-size:.94rem}.contact{color:var(--primary);font-weight:700;font-size:.94rem}
-    .hero{padding:86px 0 72px;display:grid;grid-template-columns:1.08fr .92fr;gap:52px;align-items:center}.tag{display:inline-flex;padding:8px 14px;border-radius:999px;background:rgba(124,247,212,.12);border:1px solid rgba(124,247,212,.28);color:var(--primary);font-weight:800;margin-bottom:20px}h1{font-size:clamp(2.6rem,7vw,5.7rem);line-height:.95;letter-spacing:-.065em;margin-bottom:24px}.gradient{background:linear-gradient(90deg,var(--primary),var(--secondary),var(--accent));-webkit-background-clip:text;color:transparent}.hero-text{font-size:1.18rem;color:var(--muted);max-width:660px;margin-bottom:20px}.proof{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}.proof-item{padding:18px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.05)}.proof-item strong{display:block;color:var(--text);margin-bottom:4px}.proof-item span{color:var(--muted);font-size:.93rem}
-    .visual-card{background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1px solid var(--line);border-radius:38px;padding:18px;box-shadow:var(--shadow)}.mockup{background:#0b0e22;border:1px solid var(--line);border-radius:30px;min-height:540px;padding:28px;position:relative;overflow:hidden}.mockup:before{content:"";position:absolute;width:230px;height:230px;border-radius:50%;background:rgba(255,122,182,.17);top:-80px;right:-70px}.mockup:after{content:"";position:absolute;width:210px;height:210px;border-radius:50%;background:rgba(124,247,212,.13);bottom:-90px;left:-80px}.phone-top,.game-ui,.qr-card{position:relative;z-index:1}.phone-top{display:flex;justify-content:space-between;color:var(--muted);font-size:.86rem;margin-bottom:24px}.qr-card{padding:20px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid var(--line);text-align:center;margin-bottom:18px}.qr{width:128px;height:128px;margin:14px auto 10px;background:linear-gradient(90deg,#fff 10px,transparent 10px) 0 0/27px 27px,linear-gradient(#fff 10px,transparent 10px) 0 0/27px 27px,#111633;border:10px solid #fff;border-radius:16px}.game-ui{padding:22px;border-radius:24px;background:radial-gradient(circle at top right,rgba(255,206,107,.18),transparent 40%),rgba(29,34,71,.85);border:1px solid var(--line)}.turn{color:var(--secondary);font-weight:900;margin-bottom:14px}.question{background:rgba(255,255,255,.9);color:#12162c;padding:18px;border-radius:18px;font-weight:800;margin-bottom:14px}.options{display:grid;gap:10px}.option{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid var(--line);display:flex;gap:10px;align-items:center}.letter{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--secondary);color:#111633;font-weight:900}
-    section{padding:72px 0}.section-title{max-width:780px;margin-bottom:34px}.section-title h2{font-size:clamp(2rem,4vw,3.4rem);line-height:1;letter-spacing:-.045em;margin-bottom:16px}.section-title p{color:var(--muted);font-size:1.06rem}.grid{display:grid;gap:20px}.three{grid-template-columns:repeat(3,1fr)}.four{grid-template-columns:repeat(4,1fr)}.two{grid-template-columns:repeat(2,1fr)}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}.card h3{font-size:1.22rem;margin-bottom:10px}.card p,.card li{color:var(--muted)}.icon{width:48px;height:48px;border-radius:16px;background:rgba(124,247,212,.12);display:grid;place-items:center;font-size:1.4rem;margin-bottom:18px}
-    .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.step{background:var(--soft);border:1px solid var(--line);border-radius:20px;padding:22px}.step span{width:34px;height:34px;border-radius:50%;background:var(--secondary);color:#111633;display:grid;place-items:center;font-weight:900;margin-bottom:14px}.game-card{min-height:230px;background:radial-gradient(circle at top right,rgba(124,247,212,.13),transparent 38%),rgba(29,34,71,.82);border:1px solid var(--line);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column;justify-content:space-between}.badge{width:fit-content;padding:7px 12px;border-radius:999px;background:rgba(255,122,182,.14);color:#ffd7e8;font-size:.85rem;font-weight:800;margin-bottom:24px}.split{display:grid;grid-template-columns:.9fr 1.1fr;gap:38px;align-items:start}.list{display:grid;gap:14px}.list-item{display:flex;gap:14px;align-items:flex-start;color:var(--muted)}.check{color:var(--primary);font-weight:900}.audience{display:flex;flex-wrap:wrap;gap:10px}.pill{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--muted)}.note{border-radius:30px;background:radial-gradient(circle at 50% 0%,rgba(124,247,212,.18),transparent 36%),rgba(255,255,255,.06);border:1px solid var(--line);padding:42px;box-shadow:var(--shadow)}.note h2{font-size:clamp(2rem,5vw,4rem);line-height:1;letter-spacing:-.045em;margin-bottom:18px}.note p{color:var(--muted);font-size:1.06rem;max-width:760px}footer{padding:36px 0;border-top:1px solid var(--line);color:var(--muted)}.footer-content{display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
-    @media(max-width:920px){.hero,.split,.two{grid-template-columns:1fr}.three,.four,.steps,.proof{grid-template-columns:1fr}.nav-links{display:none}.contact{display:none}.hero{padding-top:54px}}
+    .hero{
+      padding:86px 0 72px;
+      display:grid;
+      grid-template-columns:1.08fr .92fr;
+      gap:52px;
+      align-items:center}.tag{display:inline-flex;padding:8px 14px;border-radius:999px;background:rgba(124,247,212,.12);border:1px solid rgba(124,247,212,.28);color:var(--primary);font-weight:800;margin-bottom:20px}h1{font-size:clamp(2.6rem,7vw,5.7rem);line-height:.95;letter-spacing:-.065em;margin-bottom:24px}.gradient{background:linear-gradient(90deg,var(--primary),var(--secondary),var(--accent));-webkit-background-clip:text;color:transparent}.hero-text{font-size:1.18rem;color:var(--muted);max-width:660px;margin-bottom:20px}.proof{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}.proof-item{padding:18px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.05)}.proof-item strong{display:block;color:var(--text);margin-bottom:4px}.proof-item span{color:var(--muted);font-size:.93rem}
+    .btn {
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #04131c;
+    }
+
+    .btn-secondary {
+      border: 1px solid var(--line);
+      color: var(--text);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+      .visual-card{
+      background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1px solid var(--line);border-radius:38px;padding:18px;box-shadow:var(--shadow)}.mockup{background:#0b0e22;border:1px solid var(--line);border-radius:30px;min-height:540px;padding:28px;position:relative;overflow:hidden}.mockup:before{content:"";position:absolute;width:230px;height:230px;border-radius:50%;background:rgba(255,122,182,.17);top:-80px;right:-70px}.mockup:after{content:"";position:absolute;width:210px;height:210px;border-radius:50%;background:rgba(124,247,212,.13);bottom:-90px;left:-80px}.phone-top,.game-ui,.qr-card{position:relative;z-index:1}.phone-top{display:flex;justify-content:space-between;color:var(--muted);font-size:.86rem;margin-bottom:24px}.qr-card{padding:20px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid var(--line);text-align:center;margin-bottom:18px}.qr{width:128px;height:128px;margin:14px auto 10px;background:linear-gradient(90deg,#fff 10px,transparent 10px) 0 0/27px 27px,linear-gradient(#fff 10px,transparent 10px) 0 0/27px 27px,#111633;border:10px solid #fff;border-radius:16px}.game-ui{padding:22px;border-radius:24px;background:radial-gradient(circle at top right,rgba(255,206,107,.18),transparent 40%),rgba(29,34,71,.85);border:1px solid var(--line)}.turn{color:var(--secondary);font-weight:900;margin-bottom:14px}.question{background:rgba(255,255,255,.9);color:#12162c;padding:18px;border-radius:18px;font-weight:800;margin-bottom:14px}.options{display:grid;gap:10px}.option{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid var(--line);display:flex;gap:10px;align-items:center}.letter{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--secondary);color:#111633;font-weight:900}
+    section{
+      padding:72px 0
+    }
+
+      .section-title{
+        max-width:780px;margin-bottom:34px
+      }
+
+      .section-title h2{
+        font-size:clamp(2rem,4vw,3.4rem);
+        line-height:1;
+        letter-spacing:-.045em;
+        margin-bottom:16px
+      }
+
+      .section-title p{
+        color:var(--muted);
+          font-size:1.06rem
+        }
+        .grid{
+          display:grid;gap:20px
+          }
+          .three{grid-template-columns:repeat(3,1fr)}.four{grid-template-columns:repeat(4,1fr)}.two{grid-template-columns:repeat(2,1fr)}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}.card h3{font-size:1.22rem;margin-bottom:10px}.card p,.card li{color:var(--muted)}.icon{width:48px;height:48px;border-radius:16px;background:rgba(124,247,212,.12);display:grid;place-items:center;font-size:1.4rem;margin-bottom:18px}
+    .steps{
+      display:grid;grid-template-columns:repeat(5,1fr);gap:14px
+    }
+    .step{background:var(--soft);border:1px solid var(--line);border-radius:20px;padding:22px}.step span{width:34px;height:34px;border-radius:50%;background:var(--secondary);color:#111633;display:grid;place-items:center;font-weight:900;margin-bottom:14px}.game-card{min-height:230px;background:radial-gradient(circle at top right,rgba(124,247,212,.13),transparent 38%),rgba(29,34,71,.82);border:1px solid var(--line);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column;justify-content:space-between}.badge{width:fit-content;padding:7px 12px;border-radius:999px;background:rgba(255,122,182,.14);color:#ffd7e8;font-size:.85rem;font-weight:800;margin-bottom:24px}.split{display:grid;grid-template-columns:.9fr 1.1fr;gap:38px;align-items:start}.list{display:grid;gap:14px}.list-item{display:flex;gap:14px;align-items:flex-start;color:var(--muted)}.check{color:var(--primary);font-weight:900}.audience{display:flex;flex-wrap:wrap;gap:10px}.pill{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--muted)}.note{border-radius:30px;background:radial-gradient(circle at 50% 0%,rgba(124,247,212,.18),transparent 36%),rgba(255,255,255,.06);border:1px solid var(--line);padding:42px;box-shadow:var(--shadow)}.note h2{font-size:clamp(2rem,5vw,4rem);line-height:1;letter-spacing:-.045em;margin-bottom:18px}.note p{color:var(--muted);font-size:1.06rem;max-width:760px}footer{padding:36px 0;border-top:1px solid var(--line);color:var(--muted)}.footer-content{display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+    
+    @media(max-width:920px){
+      .hero,.split,.two{
+        grid-template-columns:1fr
+      }
+      .three,.four,.steps,.proof{
+        grid-template-columns:1fr
+      }
+      .nav-links{
+        display:none
+      }
+        .contact{
+          display:none
+        }
+        .hero{
+          padding-top:54px
+        }
+      }
   </style>
 </head>
 <body>
-<header><div class="container nav"><a class="brand" href="#"><span class="brand-mark">QR</span><span>QRGame</span></a><nav class="nav-links"><a href="#que-es">Qué es</a><a href="#flujo">Flujo</a><a href="#juegos">Juegos</a><a href="#metricas">Métricas</a></nav><a class="contact" href="mailto:hola@nerisatech.com">hola@nerisatech.com</a></div></header>
+<header>
+  <div class="container nav"><a class="brand" href="#"><span class="brand-mark">QR</span><span>QRGames</span></a>
+    <nav class="nav-links">
+      <a href="#que-es">Qué es</a>
+      <a href="#flujo">Flujo</a>
+      <a href="#juegos">Juegos</a>
+      <a href="#metricas">Métricas</a>
+    </nav>
+    <a class="contact" href="mailto:hola@nerisatech.com">hola@nerisatech.com</a>
+  </div>
+</header>
 <main>
-<section class="container hero"><div><span class="tag">Experiencias interactivas por QR</span><h1>Convierte cualquier producto, mesa o promoción en una <span class="gradient">experiencia de juego</span>.</h1><p class="hero-text">QRGame es una propuesta de Nerisa Tech para crear minijuegos web personalizados que tus clientes pueden abrir escaneando un código QR, sin instalar aplicaciones.</p><p class="hero-text">Está pensado para marcas, restaurantes, bares y eventos que quieren generar convivencia, interacción y recordación de marca de forma sencilla y accesible.</p><div class="proof"><div class="proof-item"><strong>Escanea</strong><span>El cliente entra desde su celular.</span></div><div class="proof-item"><strong>Juega</strong><span>Participa solo o con su grupo.</span></div><div class="proof-item"><strong>Recuerda</strong><span>Tu marca se vuelve parte de la experiencia.</span></div></div></div><div class="visual-card"><div class="mockup"><div class="phone-top"><span>QRGame Demo</span><span>4 jugadores</span></div><div class="qr-card"><h3>Scan & Play</h3><div class="qr"></div><p>Una experiencia desde tu mesa, producto o evento.</p></div><div class="game-ui"><div class="turn">Turno de: Mariana</div><div class="question">¿Cuál es el ingrediente principal del platillo estrella?</div><div class="options"><div class="option"><span class="letter">A</span> Pollo</div><div class="option"><span class="letter">B</span> Champiñones</div><div class="option"><span class="letter">C</span> Camarón</div></div></div></div></div></section>
-<section class="container" id="que-es"><div class="section-title"><h2>¿Qué es QRGame?</h2><p>Es una plataforma de experiencias de juego accesibles mediante QR. La idea es que una marca pueda colocar un código en su producto, mesa, menú, empaque, stand o material promocional para abrir una dinámica interactiva desde el celular.</p></div><div class="grid three"><article class="card"><div class="icon">📦</div><h3>Pensado para productos</h3><p>Un empaque o etiqueta puede convertirse en la entrada a una experiencia de marca.</p></article><article class="card"><div class="icon">🍽️</div><h3>Ideal para restaurantes</h3><p>El tiempo de espera puede transformarse en una dinámica por turnos para convivir en la mesa.</p></article><article class="card"><div class="icon">🎪</div><h3>Útil para eventos</h3><p>Ferias, expos y activaciones pueden atraer participación con juegos rápidos y memorables.</p></article></div></section>
-<section class="container" id="flujo"><div class="section-title"><h2>Flujo de la experiencia para el cliente</h2><p>QRGame busca reducir la fricción: no hay descargas, no hay instalación y no requiere explicar demasiado.</p></div><div class="steps"><article class="step"><span>1</span><h3>Encuentra el QR</h3><p>En mesa, producto, menú, stand o promoción.</p></article><article class="step"><span>2</span><h3>Escanea</h3><p>Abre una página web desde su celular.</p></article><article class="step"><span>3</span><h3>Inicia</h3><p>Elige modo, jugadores o dinámica.</p></article><article class="step"><span>4</span><h3>Juega</h3><p>Participa por turnos, responde o cumple retos.</p></article><article class="step"><span>5</span><h3>Comparte</h3><p>La marca queda asociada a un momento divertido.</p></article></div></section>
-<section class="container"><div class="section-title"><h2>Flujo de trabajo con la marca</h2><p>QRGame está pensado para personalizarse por campaña sin tener que desarrollar una aplicación desde cero.</p></div><div class="grid four"><article class="card"><h3>1. Concepto</h3><p>Definimos objetivo, público y contexto: restaurante, producto, evento o promoción.</p></article><article class="card"><h3>2. Personalización</h3><p>Adaptamos colores, logo, textos, reglas, preguntas, premios o retos.</p></article><article class="card"><h3>3. Publicación</h3><p>Se genera una liga web y el QR para usarlo en material físico o digital.</p></article><article class="card"><h3>4. Medición</h3><p>La experiencia puede registrar escaneos, partidas y participación.</p></article></div></section>
-<section class="container" id="juegos"><div class="section-title"><h2>Tipos de juegos que puede incluir QRGame</h2><p>El enfoque no es hacer juegos complejos, sino experiencias cortas, fáciles de entender y diseñadas para convivencia.</p></div><div class="grid two"><article class="game-card"><span class="badge">Restaurantes y bares</span><div><h3>Trivia por turnos</h3><p>Preguntas sobre el menú, ingredientes, historia del lugar, platillos populares o curiosidades.</p></div></article><article class="game-card"><span class="badge">Reuniones y bebidas</span><div><h3>Pirinola digital</h3><p>Una dinámica mexicana tradicional adaptada a retos, premios, castigos o decisiones divertidas.</p></div></article><article class="game-card"><span class="badge">Eventos y activaciones</span><div><h3>Ruleta de premios</h3><p>Ideal para stands, lanzamientos y promociones con recompensas o descuentos.</p></div></article><article class="game-card"><span class="badge">Productos y retail</span><div><h3>Memoria de marca</h3><p>Juego visual para descubrir productos, personajes, ingredientes o beneficios.</p></div></article></div></section>
-<section class="container"><div class="split"><div class="section-title"><h2>Enfoque en convivencia multijugador</h2><p>QRGame está pensado para momentos presenciales: una mesa, una reunión, una fila, un stand o una activación. La meta es que las personas interactúen entre ellas mientras conviven con la marca.</p></div><div class="list"><div class="list-item"><span class="check">✓</span><p><strong>Juego desde un solo celular:</strong> ideal para grupos que se pasan el dispositivo por turnos.</p></div><div class="list-item"><span class="check">✓</span><p><strong>Dinámicas rápidas:</strong> partidas de pocos minutos para no interrumpir la experiencia principal.</p></div><div class="list-item"><span class="check">✓</span><p><strong>Reglas simples:</strong> cualquiera puede entenderlo sin instrucciones largas.</p></div><div class="list-item"><span class="check">✓</span><p><strong>Personalidad de marca:</strong> cada pregunta, reto o premio puede hablar del negocio.</p></div></div></div></section>
-<section class="container"><div class="section-title"><h2>¿Dónde puede aplicarse?</h2><p>QRGame puede adaptarse a distintos contextos sin cambiar el concepto base.</p></div><div class="audience"><span class="pill">Restaurantes</span><span class="pill">Bares</span><span class="pill">Cervecerías</span><span class="pill">Cafeterías</span><span class="pill">Food trucks</span><span class="pill">Ferias</span><span class="pill">Expos</span><span class="pill">Lanzamientos</span><span class="pill">Activaciones de marca</span><span class="pill">Promociones por temporada</span><span class="pill">Productos con empaque</span><span class="pill">Eventos corporativos</span></div></section>
+<section class="container hero">
+  <div>
+    <span class="tag">Experiencias interactivas por QR</span>
+    <h1>Convierte cualquier producto, mesa o promoción en una<span class="gradient">experiencia de juego</span>.</h1>
+      <p class="hero-text">QRGames es una propuesta de Nerisa Tech para crear minijuegos web personalizados que tus clientes pueden abrir escaneando un código QR, sin instalar aplicaciones.</p>
+      <p class="hero-text">Está pensado para marcas, restaurantes, bares y eventos que quieren generar convivencia, interacción y recordación de marca de forma sencilla y accesible.</p><div class="proof"><div class="proof-item"><strong>Escanea</strong><span>El cliente entra desde su celular.</span></div><div class="proof-item"><strong>Juega</strong><span>Participa solo o con su grupo.</span></div><div class="proof-item"><strong>Recuerda</strong><span>Tu marca se vuelve parte de la experiencia.</span></div></div></div><div class="visual-card"><div class="mockup"><div class="phone-top"><span>QRGames Demo</span><span>4 jugadores</span></div><div class="qr-card"><h3>Scan & Play</h3><div class="qr"></div><p>Una experiencia desde tu mesa, producto o evento.</p></div><div class="game-ui"><div class="turn">Turno de: Mariana</div><div class="question">¿Cuál es el ingrediente principal del platillo estrella?</div><div class="options"><div class="option"><span class="letter">A</span> Pollo</div><div class="option"><span class="letter">B</span> Champiñones</div><div class="option"><span class="letter">C</span> Camarón</div></div></div></div></div></section>
+
+      <section class="container" id="que-es"><div class="section-title"><h2>¿Qué es QRGames?</h2><p>Es una plataforma de experiencias de juego accesibles mediante QR. La idea es que una marca pueda colocar un código en su producto, mesa, menú, empaque, stand o material promocional para abrir una dinámica interactiva desde el celular.</p></div><div class="grid three"><article class="card"><div class="icon">📦</div><h3>Pensado para productos</h3><p>Un empaque o etiqueta puede convertirse en la entrada a una experiencia de marca.</p></article><article class="card"><div class="icon">🍽️</div><h3>Ideal para restaurantes</h3><p>El tiempo de espera puede transformarse en una dinámica por turnos para convivir en la mesa.</p></article><article class="card"><div class="icon">🎪</div><h3>Útil para eventos</h3><p>Ferias, expos y activaciones pueden atraer participación con juegos rápidos y memorables.</p></article></div></section>
+<section class="container" id="flujo"><div class="section-title"><h2>Flujo de la experiencia para el cliente</h2><p>QRGames busca reducir la fricción: no hay descargas, no hay instalación y no requiere explicar demasiado.</p></div><div class="steps"><article class="step"><span>1</span><h3>Encuentra el QR</h3><p>En mesa, producto, menú, stand o promoción.</p></article><article class="step"><span>2</span><h3>Escanea</h3><p>Abre una página web desde su celular.</p></article><article class="step"><span>3</span><h3>Inicia</h3><p>Elige modo, jugadores o dinámica.</p></article><article class="step"><span>4</span><h3>Juega</h3><p>Participa por turnos, responde o cumple retos.</p></article><article class="step"><span>5</span><h3>Comparte</h3><p>La marca queda asociada a un momento divertido.</p></article></div></section>
+<section class="container"><div class="section-title"><h2>Flujo de trabajo con la marca</h2><p>QRGames está pensado para personalizarse por campaña sin tener que desarrollar una aplicación desde cero.</p></div><div class="grid four"><article class="card"><h3>1. Concepto</h3><p>Definimos objetivo, público y contexto: restaurante, producto, evento o promoción.</p></article><article class="card"><h3>2. Personalización</h3><p>Adaptamos colores, logo, textos, reglas, preguntas, premios o retos.</p></article><article class="card"><h3>3. Publicación</h3><p>Se genera una liga web y el QR para usarlo en material físico o digital.</p></article><article class="card"><h3>4. Medición</h3><p>La experiencia puede registrar escaneos, partidas y participación.</p></article></div></section>
+<section class="container" id="juegos">
+  <div class="section-title">
+    <h2>Tipos de juegos que puede incluir QRGames</h2>
+    <p>El enfoque no es hacer juegos complejos, sino experiencias cortas, fáciles de entender y diseñadas para convivencia.</p>
+  </div>
+  <div class="grid two">
+    <article class="game-card">
+      <span class="badge">Restaurantes y bares</span>
+      <div>
+        <h3>Trivia por turnos</h3>
+        <p>Preguntas sobre el menú, ingredientes, historia del lugar, platillos populares o curiosidades.</p>
+        <br>
+        <a class="btn btn-secondary">Próximamente</a>
+      </div>
+    </article>
+    <article class="game-card">
+      <span class="badge">Reuniones y bebidas</span>
+      <div>
+        <h3>Pirinola digital</h3>
+        <p>Una dinámica mexicana tradicional adaptada a retos, premios, castigos o decisiones divertidas.</p>
+        <br>
+        <a class="btn btn-primary" href="/QRGames/demo_tequila/pirinola_shot/index.html">Probar Demo</a>
+      </div>
+    </article>
+    <article class="game-card">
+      <span class="badge">Eventos y activaciones</span>
+      <div>
+        <h3>Ruleta de premios</h3>
+        <p>Ideal para stands, lanzamientos y promociones con recompensas o descuentos.</p>
+        <br>
+        <a class="btn btn-secondary">Próximamente</a>
+      </div>
+    </article>
+    <article class="game-card">
+      <span class="badge">Productos y retail</span>
+      <div>
+        <h3>Memoria de marca</h3>
+        <p>Juego visual para descubrir productos, personajes, ingredientes o beneficios.</p>
+        <br>
+        <a class="btn btn-secondary">Próximamente</a>
+      </div>
+    </article>
+  </div>
+</section>
+<section class="container"><div class="split"><div class="section-title"><h2>Enfoque en convivencia multijugador</h2><p>QRGames está pensado para momentos presenciales: una mesa, una reunión, una fila, un stand o una activación. La meta es que las personas interactúen entre ellas mientras conviven con la marca.</p></div><div class="list"><div class="list-item"><span class="check">✓</span><p><strong>Juego desde un solo celular:</strong> ideal para grupos que se pasan el dispositivo por turnos.</p></div><div class="list-item"><span class="check">✓</span><p><strong>Dinámicas rápidas:</strong> partidas de pocos minutos para no interrumpir la experiencia principal.</p></div><div class="list-item"><span class="check">✓</span><p><strong>Reglas simples:</strong> cualquiera puede entenderlo sin instrucciones largas.</p></div><div class="list-item"><span class="check">✓</span><p><strong>Personalidad de marca:</strong> cada pregunta, reto o premio puede hablar del negocio.</p></div></div></div></section>
+<section class="container"><div class="section-title"><h2>¿Dónde puede aplicarse?</h2><p>QRGames puede adaptarse a distintos contextos sin cambiar el concepto base.</p></div><div class="audience"><span class="pill">Restaurantes</span><span class="pill">Bares</span><span class="pill">Cervecerías</span><span class="pill">Cafeterías</span><span class="pill">Food trucks</span><span class="pill">Ferias</span><span class="pill">Expos</span><span class="pill">Lanzamientos</span><span class="pill">Activaciones de marca</span><span class="pill">Promociones por temporada</span><span class="pill">Productos con empaque</span><span class="pill">Eventos corporativos</span></div></section>
 <section class="container" id="metricas"><div class="section-title"><h2>Métricas que pueden integrarse</h2><p>Además de entretener, la experiencia puede ayudar a entender la participación de los clientes.</p></div><div class="grid four"><article class="card"><h3>Escaneos</h3><p>Cuántas personas llegaron a la experiencia.</p></article><article class="card"><h3>Partidas iniciadas</h3><p>Cuántos usuarios realmente comenzaron a jugar.</p></article><article class="card"><h3>Tiempo de interacción</h3><p>Cuánto tiempo permanecen conviviendo con la marca.</p></article><article class="card"><h3>Campañas</h3><p>Comparación entre eventos, sucursales o promociones.</p></article></div></section>
-<section class="container"><div class="note"><h2>QRGame by Nerisa Tech</h2><p>Una propuesta para convertir códigos QR en experiencias memorables: escanear, jugar, convivir y recordar la marca.</p><p style="margin-top:18px">Contacto: hola@nerisatech.com · Nerisa Tech · Navegando ideas, creando tecnología.</p></div></section>
+<section class="container"><div class="note"><h2>QRGames by Nerisa Tech</h2><p>Una propuesta para convertir códigos QR en experiencias memorables: escanear, jugar, convivir y recordar la marca.</p><p style="margin-top:18px">Contacto: hola@nerisatech.com · Nerisa Tech · Navegando ideas, creando tecnología.</p></div></section>
 </main>
-<footer><div class="container footer-content"><p>QRGame by Nerisa Tech</p><p>hola@nerisatech.com</p></div></footer>
+<footer><div class="container footer-content"><p>QRGames by Nerisa Tech</p><p>hola@nerisatech.com</p></div></footer>
 </body>
 </html>
