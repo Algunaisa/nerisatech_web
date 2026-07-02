@@ -19,6 +19,7 @@ let jugadorActual = 0;
 let pirinola;
 let textoTitulo;
 let textoTurno;
+let textoSiguienteTurno;
 let textoResultado;
 let botonGirar;
 
@@ -28,19 +29,26 @@ const opciones = [
   'Todos toman',
   'Elige quién toma',
   'Te salvaste',
-  'Reto rápido'
+  'Baila la macarena',
+  'Canta una rola',
+  'Cuenta un chiste'
 ];
 
 function create() {
   const scene = this;
 
-  textoTitulo = scene.add.text(195, 60, 'Pirinola QR Party', {
+  textoTitulo = scene.add.text(195, 60, 'Pirinola - QR Games', {
     fontSize: '28px',
     color: '#ffffff',
     fontStyle: 'bold'
   }).setOrigin(0.5);
 
   textoTurno = scene.add.text(195, 120, 'Ingresa jugadores', {
+    fontSize: '20px',
+    color: '#ffffff'
+  }).setOrigin(0.5);
+
+  textoSiguienteTurno = scene.add.text(195, 500, 'Turno de ', {
     fontSize: '20px',
     color: '#ffffff'
   }).setOrigin(0.5);
@@ -56,10 +64,12 @@ function create() {
 
   pirinola = scene.add.container(195, 330);
 
-  const base = scene.add.triangle(0, 0, 0, 120, 80, -90, -80, -90, 0xffd36a);
+  //const base = scene.add.triangle(0, 0, 0, 120, 80, -90, -80, -90, 0xffd36a);
+  const base = scene.add.polygon(0, 0, [0, -60, 52, 30, -52, 30], 0x88ff00);
+  const flecha = scene.add.rectangle(0, 0, 60, 0x88ff00);//scene.add.triangle(0, 0, 0, 30, 30, -30, -30, -30, 0xffd300);
   const centro = scene.add.circle(0, 0, 16, 0xffffff);
 
-  pirinola.add([base, centro]);
+  pirinola.add([base, centro, flecha]);
   pirinola.setVisible(false);
 
   botonGirar = scene.add.text(195, 640, 'GIRAR', {
