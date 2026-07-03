@@ -15,7 +15,9 @@ const config = {
 new Phaser.Game(config);
 
 let jugadores = [];
+let puntos = [];
 let jugadorActual = 0;
+let mesa = 0;
 let pirinola;
 let textoTitulo;
 let textoTurno;
@@ -35,18 +37,13 @@ const opciones = [
 function create() {
   const scene = this;
 
-  textoTitulo = scene.add.text(195, 60, 'Pirinola - QR Games', {
+  textoTitulo = scene.add.text(195, 60, 'Pirinola Pocket', {
     fontSize: '28px',
     color: '#ffffff',
     fontStyle: 'bold'
   }).setOrigin(0.5);
 
   textoTurno = scene.add.text(195, 120, 'Ingresa jugadores', {
-    fontSize: '20px',
-    color: '#ffffff'
-  }).setOrigin(0.5);
-
-  textoSiguienteTurno = scene.add.text(195, 500, 'Turno de ', {
     fontSize: '20px',
     color: '#ffffff'
   }).setOrigin(0.5);
@@ -99,6 +96,18 @@ function create() {
   .setVisible(false);
 
   botonGirar.on('pointerdown', () => girarPirinola(scene));
+
+  botonSiguiente = scene.add.text(195, 640, 'SIGUIENTE', {
+    fontSize: '28px',
+    color: '#101020',
+    backgroundColor: '#36d6c9',
+    padding: { x: 35, y: 14 }
+  })
+  .setOrigin(0.5)
+  .setInteractive()
+  .setVisible(false);
+
+  botonSiguiente.on('pointerdown', () => siguienteJugador(scene));
 }
 
 function crearFormularioHTML(scene) {
@@ -133,16 +142,17 @@ function crearFormularioHTML(scene) {
     const cantidad = Number(document.getElementById('numJugadores').value);
 
     jugadores = [];
-
+    mesa = 4;
     for (let i = 1; i <= cantidad; i++) {
       jugadores.push(`Jugador ${i}`);
+      puntos.push(4);
     }
 
     div.remove();
 
     jugadorActual = 0;
     textoTurno.setText(`Turno de ${jugadores[jugadorActual]}`);
-    textoResultado.setText('Toca GIRAR');
+    textoResultado.setText('');
     pirinola.setVisible(true);
     botonGirar.setVisible(true);
   };
@@ -199,15 +209,59 @@ function girarPirinola(scene) {
     onComplete: () => {
       textoResultado.setText(resultado);
 
-      jugadorActual++;
+      actualizarPuntos(resultado);
 
-      if (jugadorActual >= jugadores.length) {
-        jugadorActual = 0;
-      }
+      
 
-      textoTurno.setText(`Siguiente: ${jugadores[jugadorActual]}`);
-
-      botonGirar.setInteractive();
+      botonSiguiente.setVisible(true);
+      botonGirar.setVisible(false);
     }
   });
+}
+
+function siguienteJugador(scene) {
+  jugadorActual++;
+  if (jugadorActual >= jugadores.length) {
+    jugadorActual = 0;
+  }
+  textoTurno.setText(`${jugadores[jugadorActual]}`);
+
+  textoResultado.setText('');
+
+  botonSiguiente.setVisible(false);
+  botonGirar.setVisible(true).setInteractive(true);
+
+  pirinola.setPosition(pirinola.xi, pirinola.yi);
+}
+
+function actualizarPuntos(resultado){
+  switch(resultado){
+    case 'Toma 1':
+      
+      break;
+    case 'Toma 2':
+      break;
+    case 'Toma Todo':
+      break;
+    case 'Todos Ponen':
+      break;
+    case 'Pon 1':
+      break;
+    case 'Pon 2':
+      break;
+    default:
+  }
+  if(resultado.Number == 0){
+        mesa--;
+        puntos[jugadorActual]++;
+        console(`puntos jugador ${jugadorActual}:${puntos[jugadorActual]}`);
+      }
+      else if(resultado == 1){
+        mesa = mesa - 2;
+        puntos[jugadorActual] = puntos[jugadorActual] - 2;
+      }
+      else if(resultado == 2){
+        puntos[jugadorActual] = puntos[jugadorActual] + mesa;
+        mesa = 0;
+      }
 }
