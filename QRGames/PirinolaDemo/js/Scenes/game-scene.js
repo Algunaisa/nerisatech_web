@@ -268,7 +268,7 @@ function actualizarPuntos(resultado){
   
   for (let i = 0; i < puntos.length; i++) {
     if(i === jugadorActual){
-      console.log(`puntos actual ${jugadores[jugadorActual]}: ${puntos[i]}`);
+      console.log(`puntos *${jugadores[jugadorActual]}: ${puntos[i]}`);
     }
     else{
       console.log(`puntos ${jugadores[i]}: ${puntos[i]}`);
