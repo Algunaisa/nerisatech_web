@@ -211,8 +211,6 @@ function girarPirinola(scene) {
 
       actualizarPuntos(resultado);
 
-      
-
       botonSiguiente.setVisible(true);
       botonGirar.setVisible(false);
     }
@@ -235,33 +233,46 @@ function siguienteJugador(scene) {
 }
 
 function actualizarPuntos(resultado){
+  console.log(`***${jugadores[jugadorActual]}***`);
+  console.log(`Resultado: ${resultado}`);
   switch(resultado){
     case 'Toma 1':
-      
+      puntos[jugadorActual]++;
+      mesa--;
       break;
     case 'Toma 2':
+      puntos[jugadorActual] = puntos[jugadorActual] - 2;
+      mesa = mesa - 2;
       break;
     case 'Toma Todo':
+      puntos[jugadorActual] = puntos[jugadorActual] + mesa;
+      mesa = 0;
       break;
     case 'Todos Ponen':
+      for (let i = 0; i < puntos.length; i++) {
+        puntos[i]--;
+        mesa++;
+      }
       break;
     case 'Pon 1':
+      puntos[jugadorActual]--;
+      mesa++;
       break;
     case 'Pon 2':
+      puntos[jugadorActual] = puntos[jugadorActual] - 2;
+      mesa = mesa + 2;
       break;
     default:
+      console.error(`Resultado no reconocido: ${resultado}`);
   }
-  if(resultado.Number == 0){
-        mesa--;
-        puntos[jugadorActual]++;
-        console(`puntos jugador ${jugadorActual}:${puntos[jugadorActual]}`);
-      }
-      else if(resultado == 1){
-        mesa = mesa - 2;
-        puntos[jugadorActual] = puntos[jugadorActual] - 2;
-      }
-      else if(resultado == 2){
-        puntos[jugadorActual] = puntos[jugadorActual] + mesa;
-        mesa = 0;
-      }
+  
+  for (let i = 0; i < puntos.length; i++) {
+    if(i === jugadorActual){
+      console.log(`puntos actual ${jugadores[jugadorActual]}: ${puntos[i]}`);
+    }
+    else{
+      console.log(`puntos ${jugadores[i]}: ${puntos[i]}`);
+    }
+  }
+  console.log(`puntos mesa:${mesa}`);
 }
