@@ -21,9 +21,11 @@ let mesa = 0;
 let pirinola;
 let textoTitulo;
 let textoTurno;
-let textoSiguienteTurno;
 let textoResultado;
 let botonGirar;
+let botonSiguiente;
+let textoMesa;
+let textosJugadores = [];
 
 const opciones = [
   'Toma 1',
@@ -142,6 +144,7 @@ function crearFormularioHTML(scene) {
     const cantidad = Number(document.getElementById('numJugadores').value);
 
     jugadores = [];
+    puntos = [];
     mesa = 4;
     for (let i = 1; i <= cantidad; i++) {
       jugadores.push(`Jugador ${i}`);
@@ -155,6 +158,25 @@ function crearFormularioHTML(scene) {
     textoResultado.setText('');
     pirinola.setVisible(true);
     botonGirar.setVisible(true);
+    textosJugadores = [];
+
+    for (let i = 0; i < jugadores.length; i++) {
+      const textoJugador = scene.add.text(28, 430 + i * 24, '', {
+        fontSize: '17px',
+        color: '#ffffff'
+      });
+
+      textosJugadores.push(textoJugador);
+    }
+
+    textoMesa = scene.add.text(195, 92, `Mesa: ${mesa}`, {
+      fontSize: '18px',
+      color: '#36d6c9',
+      fontStyle: 'bold'
+    }).setOrigin(0.5);
+
+    actualizarMarcador();
+
   };
 }
 
@@ -207,9 +229,10 @@ function girarPirinola(scene) {
     duration: 2200,
     ease: 'Cubic.easeOut',
     onComplete: () => {
-      textoResultado.setText(resultado);
+      // textoResultado.setText(resultado);
 
-      actualizarPuntos(resultado);
+      const mensaje = actualizarPuntos(resultado);
+      textoResultado.setText(`${resultado}\n${mensaje}`);
 
       botonSiguiente.setVisible(true);
       botonGirar.setVisible(false);
@@ -222,7 +245,7 @@ function siguienteJugador(scene) {
   if (jugadorActual >= jugadores.length) {
     jugadorActual = 0;
   }
-  textoTurno.setText(`${jugadores[jugadorActual]}`);
+  textoTurno.setText(`Turno de ${jugadores[jugadorActual]}`);
 
   textoResultado.setText('');
 
@@ -230,49 +253,79 @@ function siguienteJugador(scene) {
   botonGirar.setVisible(true).setInteractive(true);
 
   pirinola.setPosition(pirinola.xi, pirinola.yi);
+
+  actualizarMarcador();
 }
 
 function actualizarPuntos(resultado){
   console.log(`***${jugadores[jugadorActual]}***`);
-  console.log(`Resultado: ${resultado}`);
+  // console.log(`Resultado: ${resultado}`);
+
+  const jugador = jugadores[jugadorActual];
+  let cantidad;
+  let mensaje = '';
+
   switch(resultado){
     case 'Toma 1':
-      puntos[jugadorActual]++;
-      mesa--;
+      cantidad = Math.min(1, mesa);
+      puntos[jugadorActual] += cantidad;
+      mesa -= cantidad;
+      mensaje = `${jugador} toma ${cantidad} de la mesa`;
       break;
     case 'Toma 2':
-      puntos[jugadorActual] = puntos[jugadorActual] - 2;
-      mesa = mesa - 2;
+      cantidad = Math.min(2, mesa);
+      puntos[jugadorActual] += cantidad;
+      mesa -= cantidad;
+      mensaje = `${jugador} toma ${cantidad} de la mesa`;
       break;
     case 'Toma Todo':
-      puntos[jugadorActual] = puntos[jugadorActual] + mesa;
+      puntos[jugadorActual] += mesa;
+      mensaje = `${jugador} toma todo`;
       mesa = 0;
       break;
     case 'Todos Ponen':
       for (let i = 0; i < puntos.length; i++) {
-        puntos[i]--;
-        mesa++;
+        if(puntos[i] > 0){
+          puntos[i]--;
+          mesa++;
+        }
       }
+      mensaje = 'Todos ponen 1';
       break;
     case 'Pon 1':
-      puntos[jugadorActual]--;
-      mesa++;
+      cantidad = Math.min(1, puntos[jugadorActual]);
+      puntos[jugadorActual] -= cantidad;
+      mesa += cantidad;
+      mensaje = `${jugador} pone ${cantidad}`;
       break;
     case 'Pon 2':
-      puntos[jugadorActual] = puntos[jugadorActual] - 2;
-      mesa = mesa + 2;
+      cantidad = Math.min(2, puntos[jugadorActual]);
+      puntos[jugadorActual] -= cantidad;
+      mesa += cantidad;
+      mensaje = `${jugador} pone ${cantidad}`;
       break;
     default:
       console.error(`Resultado no reconocido: ${resultado}`);
   }
-  
-  for (let i = 0; i < puntos.length; i++) {
-    if(i === jugadorActual){
-      console.log(`puntos *${jugadores[jugadorActual]}: ${puntos[i]}`);
-    }
-    else{
-      console.log(`puntos ${jugadores[i]}: ${puntos[i]}`);
-    }
+
+  actualizarMarcador();
+  console.log(mensaje);
+  return mensaje;
+}
+
+function actualizarMarcador() {
+  textoMesa.setText(`Mesa: ${mesa}`);
+
+  for (let i = 0; i < textosJugadores.length; i++) {
+    const activo = i === jugadorActual;
+
+    textosJugadores[i].setText(`${jugadores[i]}: ${puntos[i]}`);
+
+    textosJugadores[i].setStyle({
+      fontSize: activo ? '19px' : '17px',
+      color: activo ? '#ffd36a' : '#ffffff',
+      fontStyle: activo ? 'bold' : 'normal'
+    });
+
   }
-  console.log(`puntos mesa:${mesa}`);
 }
