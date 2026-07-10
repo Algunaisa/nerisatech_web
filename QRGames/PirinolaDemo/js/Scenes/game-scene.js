@@ -233,6 +233,14 @@ function girarPirinola(scene) {
 
       const mensaje = actualizarPuntos(resultado);
       textoResultado.setText(`${resultado}\n${mensaje}`);
+      revisarFinDePartida();
+
+      if (partidaTerminada()) {
+        botonSiguiente.setVisible(false);
+        botonGirar.setVisible(false);
+        botonGirar.disableInteractive();
+        return;
+      }
 
       botonSiguiente.setVisible(true);
       botonGirar.setVisible(false);
@@ -241,10 +249,7 @@ function girarPirinola(scene) {
 }
 
 function siguienteJugador(scene) {
-  jugadorActual++;
-  if (jugadorActual >= jugadores.length) {
-    jugadorActual = 0;
-  }
+  jugadorActual = obtenerSiguienteJugadorActivo();
   textoTurno.setText(`Turno de ${jugadores[jugadorActual]}`);
 
   textoResultado.setText('');
@@ -267,18 +272,33 @@ function actualizarPuntos(resultado){
 
   switch(resultado){
     case 'Toma 1':
+      if (mesa <= 0) {
+        mensaje = 'La mesa esta vacia';
+        break;
+      }
+
       cantidad = Math.min(1, mesa);
       puntos[jugadorActual] += cantidad;
       mesa -= cantidad;
       mensaje = `${jugador} toma ${cantidad} de la mesa`;
       break;
     case 'Toma 2':
+      if (mesa <= 0) {
+        mensaje = 'La mesa esta vacia';
+        break;
+      }
+
       cantidad = Math.min(2, mesa);
       puntos[jugadorActual] += cantidad;
       mesa -= cantidad;
       mensaje = `${jugador} toma ${cantidad} de la mesa`;
       break;
     case 'Toma Todo':
+      if (mesa <= 0) {
+        mensaje = 'La mesa esta vacia';
+        break;
+      }
+
       puntos[jugadorActual] += mesa;
       mensaje = `${jugador} toma todo`;
       mesa = 0;
@@ -318,14 +338,72 @@ function actualizarMarcador() {
 
   for (let i = 0; i < textosJugadores.length; i++) {
     const activo = i === jugadorActual;
+    const eliminado = puntos[i] <= 0;
 
-    textosJugadores[i].setText(`${jugadores[i]}: ${puntos[i]}`);
+    textosJugadores[i].setText(
+      eliminado ? `${jugadores[i]}: eliminado` : `${jugadores[i]}: ${puntos[i]}`
+    );
 
     textosJugadores[i].setStyle({
-      fontSize: activo ? '19px' : '17px',
-      color: activo ? '#ffd36a' : '#ffffff',
-      fontStyle: activo ? 'bold' : 'normal'
+      fontSize: activo && !eliminado ? '19px' : '17px',
+      color: eliminado ? '#7f7f95' : activo ? '#ffd36a' : '#ffffff',
+      fontStyle: activo && !eliminado ? 'bold' : 'normal'
     });
 
+  }
+}
+
+function obtenerSiguienteJugadorActivo() {
+  let siguiente = jugadorActual;
+
+  do {
+    siguiente++;
+    if (siguiente >= jugadores.length) {
+      siguiente = 0;
+    }
+  } while (puntos[siguiente] <= 0);
+
+  return siguiente;
+}
+
+function contarJugadoresActivos() {
+  let activos = 0;
+
+  for (let i = 0; i < puntos.length; i++) {
+    if (puntos[i] > 0) {
+      activos++;
+    }
+  }
+
+  return activos;
+}
+
+function obtenerGanador() {
+  for (let i = 0; i < puntos.length; i++) {
+    if (puntos[i] > 0) {
+      return jugadores[i];
+    }
+  }
+
+  return null;
+}
+
+function partidaTerminada() {
+  return contarJugadoresActivos() <= 1;
+}
+
+function revisarFinDePartida() {
+  if (!partidaTerminada()) {
+    return;
+  }
+
+  const ganador = obtenerGanador();
+
+  if (ganador) {
+    textoTurno.setText(`${ganador} gana`);
+    textoResultado.setText(`${textoResultado.text}\nFin de la partida`);
+  } else {
+    textoTurno.setText('Sin ganador');
+    textoResultado.setText(`${textoResultado.text}\nTodos quedaron fuera`);
   }
 }
