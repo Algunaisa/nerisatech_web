@@ -178,37 +178,217 @@ function crearFormularioHTML(scene) {
   div.innerHTML = `
     <div style="
       position: absolute;
-      top: 170px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 300px;
-      max-height: 430px;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
       overflow-y: auto;
-      text-align: center;
+      background: radial-gradient(circle at top, #121735 0%, #070b20 55%, #030615 100%);
       color: white;
+      font-family: 'Courier New', monospace;
+      z-index: 5;
     ">
-      <input id="numJugadores" type="number" min="2" max="4" value="4"
-        style="width: 90%; padding: 12px; font-size: 18px; border-radius: 8px; border: none;" />
-      <div style="margin-top: 6px; font-size: 13px; color: #c8c8dc;">
-        Maximo 4 jugadores
+      <div style="
+        width: min(390px, 100vw);
+        min-height: 700px;
+        padding: 36px 26px 26px;
+        box-sizing: border-box;
+        text-align: center;
+      ">
+        <div style="
+          color: #ffffff;
+          font-size: 48px;
+          line-height: 0.95;
+          font-weight: 700;
+          letter-spacing: 0;
+          text-shadow: 0 0 12px rgba(255, 255, 255, 0.75);
+        ">
+          Pirinola<br />Pocket
+        </div>
+
+        <div style="
+          margin-top: 24px;
+          color: #c8c8dc;
+          font-size: 17px;
+          font-weight: 700;
+        ">
+          Crea una mesa para jugar
+        </div>
+
+        <section style="
+          margin-top: 34px;
+          padding: 22px 22px 24px;
+          border: 2px solid #333a5c;
+          border-radius: 18px;
+          background: rgba(15, 20, 45, 0.92);
+          box-shadow: 0 0 22px rgba(54, 214, 201, 0.06);
+        ">
+          <div style="
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #36d6c9;
+            font-size: 24px;
+            font-weight: 700;
+            text-align: left;
+          ">
+            <span style="font-size: 28px; line-height: 1;">oo</span>
+            <span>Jugadores</span>
+          </div>
+
+          <div style="
+            margin-top: 12px;
+            border-top: 1px dashed rgba(54, 214, 201, 0.55);
+          "></div>
+
+          <input id="numJugadores" type="hidden" min="2" max="4" value="2" />
+
+          <div style="
+            display: grid;
+            grid-template-columns: 76px 1fr 76px;
+            gap: 14px;
+            align-items: center;
+            margin-top: 30px;
+          ">
+            <button id="btnMenosJugadores" type="button" style="
+              width: 76px;
+              height: 76px;
+              border: none;
+              border-radius: 50%;
+              background: #ffd36a;
+              color: #050817;
+              font-size: 52px;
+              line-height: 1;
+              box-shadow: 0 0 14px rgba(255, 211, 106, 0.35);
+            ">-</button>
+
+            <div id="displayJugadores" style="
+              height: 76px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border: 2px solid #333a5c;
+              border-radius: 18px;
+              background: #0b1028;
+              color: #ffffff;
+              font-size: 42px;
+              font-weight: 700;
+            ">2</div>
+
+            <button id="btnMasJugadores" type="button" style="
+              width: 76px;
+              height: 76px;
+              border: none;
+              border-radius: 50%;
+              background: #ffd36a;
+              color: #050817;
+              font-size: 52px;
+              line-height: 1;
+              box-shadow: 0 0 14px rgba(255, 211, 106, 0.35);
+            ">+</button>
+          </div>
+
+          <div style="
+            margin-top: 18px;
+            color: #c8c8dc;
+            font-size: 16px;
+          ">
+            Maximo 4 jugadores
+          </div>
+        </section>
+
+        <section style="
+          margin-top: 18px;
+          padding: 22px;
+          border: 2px solid #333a5c;
+          border-radius: 18px;
+          background: rgba(15, 20, 45, 0.92);
+        ">
+          <div style="
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #36d6c9;
+            font-size: 24px;
+            font-weight: 700;
+            text-align: left;
+          ">
+            <span style="font-size: 30px; line-height: 1;">o</span>
+            <span>Nombres</span>
+          </div>
+
+          <div style="
+            margin-top: 12px;
+            border-top: 1px dashed rgba(54, 214, 201, 0.55);
+          "></div>
+
+          <div id="camposJugadores" style="margin-top: 22px;"></div>
+        </section>
+
+        <button id="btnCrear" style="
+          width: 78%;
+          margin-top: 34px;
+          padding: 20px 18px;
+          border: none;
+          border-radius: 16px;
+          background: #ffd36a;
+          color: #050817;
+          font-family: 'Courier New', monospace;
+          font-size: 30px;
+          font-weight: 700;
+          letter-spacing: 0;
+          box-shadow: 0 0 24px rgba(255, 211, 106, 0.65);
+        ">CREAR MESA</button>
+
+        <div style="
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          margin: 34px auto 0;
+          width: 78%;
+          color: rgba(54, 214, 201, 0.55);
+        ">
+          <div style="flex: 1; border-top: 1px dashed rgba(54, 214, 201, 0.45);"></div>
+          <div style="
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #ffd36a;
+            border-radius: 50%;
+            color: #36d6c9;
+            font-size: 18px;
+          ">o</div>
+          <div style="flex: 1; border-top: 1px dashed rgba(54, 214, 201, 0.45);"></div>
+        </div>
+
+        <div style="
+          margin-top: 18px;
+          color: #c8c8dc;
+          font-size: 15px;
+          font-weight: 700;
+        ">
+          QR Games by Nerisa Tech
+        </div>
       </div>
-      
-      <div id="camposJugadores" style="margin-top: 12px;"></div>
-      <button id="btnCrear" style="
-        margin-top: 15px;
-        padding: 12px 20px;
-        font-size: 18px;
-        border: none;
-        border-radius: 8px;
-        background: #ffd36a;
-      ">Crear partida</button>
     </div>
   `;
 
   document.body.appendChild(div);
   renderizarCamposJugadores();
 
-  document.getElementById('numJugadores').oninput = () => {
+  document.getElementById('btnMenosJugadores').onclick = () => {
+    const input = document.getElementById('numJugadores');
+
+    input.value = Number(input.value) - 1;
+    renderizarCamposJugadores();
+  };
+
+  document.getElementById('btnMasJugadores').onclick = () => {
+    const input = document.getElementById('numJugadores');
+
+    input.value = Number(input.value) + 1;
     renderizarCamposJugadores();
   };
 
@@ -269,6 +449,8 @@ function renderizarCamposJugadores() {
     return;
   }
 
+  actualizarDisplayJugadores(cantidad);
+
   const nombresActuales = [];
   const inputsActuales = document.querySelectorAll('.nombreJugador');
 
@@ -287,15 +469,30 @@ function renderizarCamposJugadores() {
     input.placeholder = `Nombre ${i + 1}`;
     input.value = nombresActuales[i] || '';
     input.style.cssText = `
-      width: 90%;
-      margin-top: 8px;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: none;
+      width: 100%;
+      margin-top: ${i === 0 ? '0' : '12px'};
+      padding: 14px 16px;
+      box-sizing: border-box;
+      font-family: 'Courier New', monospace;
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+      background: #0b1028;
+      border: 2px solid #333a5c;
+      border-radius: 14px;
+      outline: none;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.25);
     `;
 
     contenedor.appendChild(input);
+  }
+}
+
+function actualizarDisplayJugadores(cantidad) {
+  const display = document.getElementById('displayJugadores');
+
+  if (display) {
+    display.textContent = cantidad;
   }
 }
 
@@ -745,7 +942,7 @@ function revisarFinDePartida(scene) {
   const ganador = obtenerGanador();
 
   if (ganador) {
-    textoTurno.setText(`Gana ${ganador} 🎉`);
+    textoTurno.setText(`Gana ${ganador}`);
     textoResultado.setText(`${textoResultado.text}\nFin de la partida`);
     animarVictoria(scene);
   } else {
