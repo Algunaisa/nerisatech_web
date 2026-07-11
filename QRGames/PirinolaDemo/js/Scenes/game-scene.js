@@ -21,15 +21,23 @@ let mesa = 0;
 let pirinola;
 let textoTitulo;
 let textoTurno;
+let textoTurnoJugador;
 let textoResultado;
 let botonGirar;
 let botonSiguiente;
 let botonNuevoJuego;
 let botonReiniciar;
+let fondoBotonGirar;
+let fondoBotonSiguiente;
+let fondoBotonNuevoJuego;
+let fondoBotonReiniciar;
 let textoMesa;
+let marcadorPanel;
+let textoDetalleResultado;
 let textosJugadores = [];
 let perfilProbabilidad = 'intenso';
 let formularioPartida;
+let ganadorPartida = null;
 
 const perfilesProbabilidad = {
   clasico: [
@@ -69,28 +77,64 @@ const perfilesProbabilidad = {
 function create() {
   const scene = this;
 
-  textoTitulo = scene.add.text(195, 60, 'Pirinola Pocket', {
-    fontSize: '28px',
+  textoTitulo = scene.add.text(195, 58, 'Pirinola\nPocket', {
+    fontFamily: 'Courier New',
+    fontSize: '38px',
     color: '#ffffff',
+    fontStyle: 'bold',
+    align: 'center'
+  }).setOrigin(0.5);
+  textoTitulo.setShadow(0, 0, '#ffffff', 10, true, true);
+
+  textoTurno = scene.add.text(195, 138, 'INGRESA JUGADORES', {
+    fontFamily: 'Courier New',
+    fontSize: '19px',
+    color: '#c8c8dc',
+    fontStyle: 'bold',
+    align: 'center',
+    wordWrap: { width: 330 }
+  }).setOrigin(0.5);
+
+  textoTurnoJugador = scene.add.text(195, 160, '', {
+    fontFamily: 'Courier New',
+    fontSize: '22px',
+    color: '#36d6c9',
+    fontStyle: 'bold',
+    align: 'center',
+    wordWrap: { width: 300 }
+  }).setOrigin(0.5);
+  textoTurnoJugador.setShadow(0, 0, '#36d6c9', 10, true, true);
+
+  textoMesa = scene.add.text(195, 190, '', {
+    fontFamily: 'Courier New',
+    fontSize: '21px',
+    color: '#36d6c9',
     fontStyle: 'bold'
   }).setOrigin(0.5);
+  textoMesa.setVisible(false);
 
-  textoTurno = scene.add.text(195, 120, 'Ingresa jugadores', {
-    fontSize: '20px',
-    color: '#ffffff'
-  }).setOrigin(0.5);
-
-  textoResultado = scene.add.text(195, 560, '', {
-    fontSize: '23px',
+  textoResultado = scene.add.text(195, 426, '', {
+    fontFamily: 'Courier New',
+    fontSize: '32px',
     color: '#ffd36a',
     fontStyle: 'bold',
     align: 'center',
     wordWrap: { width: 340 }
   }).setOrigin(0.5);
+  textoResultado.setShadow(0, 0, '#ffd36a', 10, true, true);
+
+  textoDetalleResultado = scene.add.text(195, 464, '', {
+    fontFamily: 'Courier New',
+    fontSize: '17px',
+    color: '#c8c8dc',
+    fontStyle: 'bold',
+    align: 'center',
+    wordWrap: { width: 330 }
+  }).setOrigin(0.5);
 
   crearFormularioHTML(scene);
 
-  pirinola = scene.add.container(195, 330);
+  pirinola = scene.add.container(195, 350);
   pirinola.t = 0;
 
   pirinola.xi = pirinola.x;
@@ -118,11 +162,14 @@ function create() {
   pirinola.add([base, centro]);
   pirinola.setVisible(false);
 
-  botonGirar = scene.add.text(195, 640, 'GIRAR', {
-    fontSize: '28px',
+  fondoBotonGirar = crearFondoBoton(scene, 195, 646, 172, 42, 0x36d6c9);
+  fondoBotonGirar.setVisible(false);
+
+  botonGirar = scene.add.text(195, 646, 'GIRAR', {
+    fontFamily: 'Courier New',
+    fontSize: '25px',
     color: '#101020',
-    backgroundColor: '#36d6c9',
-    padding: { x: 35, y: 14 }
+    fontStyle: 'bold',
   })
   .setOrigin(0.5)
   .setInteractive()
@@ -130,11 +177,14 @@ function create() {
 
   botonGirar.on('pointerdown', () => girarPirinola(scene));
 
-  botonSiguiente = scene.add.text(195, 640, 'SIGUIENTE', {
-    fontSize: '28px',
+  fondoBotonSiguiente = crearFondoBoton(scene, 195, 646, 206, 42, 0x36d6c9);
+  fondoBotonSiguiente.setVisible(false);
+
+  botonSiguiente = scene.add.text(195, 646, 'SIGUIENTE', {
+    fontFamily: 'Courier New',
+    fontSize: '24px',
     color: '#101020',
-    backgroundColor: '#36d6c9',
-    padding: { x: 35, y: 14 }
+    fontStyle: 'bold',
   })
   .setOrigin(0.5)
   .setInteractive()
@@ -142,11 +192,14 @@ function create() {
 
   botonSiguiente.on('pointerdown', () => siguienteJugador(scene));
 
-  botonNuevoJuego = scene.add.text(325, 28, 'NUEVO', {
+  fondoBotonNuevoJuego = crearFondoBoton(scene, 344, 24, 76, 38, 0xffd36a, 8);
+  fondoBotonNuevoJuego.setVisible(false);
+
+  botonNuevoJuego = scene.add.text(344, 24, 'NUEVO', {
+    fontFamily: 'Courier New',
     fontSize: '15px',
     color: '#101020',
-    backgroundColor: '#ffd36a',
-    padding: { x: 12, y: 8 }
+    fontStyle: 'bold',
   })
   .setOrigin(0.5)
   .setInteractive()
@@ -154,17 +207,94 @@ function create() {
 
   botonNuevoJuego.on('pointerdown', () => mostrarFormularioNuevaPartida(scene));
 
-  botonReiniciar = scene.add.text(195, 640, 'REINICIAR', {
-    fontSize: '28px',
+  fondoBotonReiniciar = crearFondoBoton(scene, 195, 646, 224, 42, 0x36d6c9);
+  fondoBotonReiniciar.setVisible(false);
+
+  botonReiniciar = scene.add.text(195, 646, 'OTRA VEZ', {
+    fontFamily: 'Courier New',
+    fontSize: '23px',
     color: '#101020',
-    backgroundColor: '#ffd36a',
-    padding: { x: 28, y: 14 }
+    fontStyle: 'bold',
   })
   .setOrigin(0.5)
   .setInteractive()
   .setVisible(false);
 
   botonReiniciar.on('pointerdown', () => reiniciarPartidaActual());
+
+  marcadorPanel = scene.add.graphics();
+  marcadorPanel.setVisible(false);
+
+  crearFooterJuego(scene);
+}
+
+function crearFooterJuego(scene) {
+  scene.add.text(95, 678, '..............', {
+    fontFamily: 'Courier New',
+    fontSize: '13px',
+    color: '#36d6c9'
+  }).setOrigin(0.5).setAlpha(0.55);
+
+  scene.add.text(295, 678, '..............', {
+    fontFamily: 'Courier New',
+    fontSize: '13px',
+    color: '#36d6c9'
+  }).setOrigin(0.5).setAlpha(0.55);
+
+  scene.add.text(195, 674, 'o', {
+    fontFamily: 'Courier New',
+    fontSize: '22px',
+    color: '#36d6c9',
+    fontStyle: 'bold'
+  }).setOrigin(0.5);
+
+  scene.add.text(195, 694, 'QR Games by Nerisa Tech', {
+    fontFamily: 'Courier New',
+    fontSize: '14px',
+    color: '#c8c8dc',
+    fontStyle: 'bold'
+  }).setOrigin(0.5);
+}
+
+function crearFondoBoton(scene, x, y, ancho, alto, color, radio = 12) {
+  const fondo = scene.add.graphics();
+
+  fondo.fillStyle(color, 1);
+  fondo.fillRoundedRect(-ancho / 2, -alto / 2, ancho, alto, radio);
+  fondo.lineStyle(2, 0xffffff, 0.55);
+  fondo.strokeRoundedRect(-ancho / 2, -alto / 2, ancho, alto, radio);
+  fondo.setPosition(x, y);
+
+  return fondo;
+}
+
+function mostrarBoton(texto, fondo, visible) {
+  texto.setVisible(visible);
+
+  if (fondo) {
+    fondo.setVisible(visible);
+  }
+}
+
+function actualizarTextoTurno() {
+  const jugador = jugadores[jugadorActual] || '';
+
+  textoTurno.setColor('#c8c8dc');
+  textoTurno.setX(195);
+  textoTurno.setText(jugador ? 'ES TURNO DE' : 'INGRESA JUGADORES');
+  textoTurnoJugador.setText(jugador ? formatearNombreUI(jugador, 12).toUpperCase() : '');
+}
+
+function formatearResultadoPrincipal(resultado) {
+  return resultado.toUpperCase();
+}
+
+function formatearNombreUI(nombre, maximo) {
+  if (nombre.length <= maximo) {
+    return nombre;
+  }
+
+  return `${nombre.slice(0, maximo - 1)}.`;
 }
 
 function crearFormularioHTML(scene) {
@@ -402,6 +532,7 @@ function crearFormularioHTML(scene) {
     jugadores = [];
     puntos = [];
     mesa = 4;
+    ganadorPartida = null;
     for (let i = 0; i < cantidad; i++) {
       const nombre = inputsNombres[i].value.trim();
 
@@ -413,29 +544,32 @@ function crearFormularioHTML(scene) {
     formularioPartida = null;
 
     jugadorActual = 0;
-    textoTurno.setText(`Turno de ${jugadores[jugadorActual]}`);
+    actualizarTextoTurno();
     textoResultado.setText('');
+    textoDetalleResultado.setText('');
     textoResultado.setColor('#ffd36a');
     pirinola.setVisible(true);
-    botonGirar.setVisible(true).setInteractive(true);
-    botonReiniciar.setVisible(false);
-    botonNuevoJuego.setVisible(true);
+    botonGirar.setText('GIRAR');
+    mostrarBoton(botonGirar, fondoBotonGirar, true);
+    botonGirar.setInteractive(true);
+    mostrarBoton(botonReiniciar, fondoBotonReiniciar, false);
+    mostrarBoton(botonNuevoJuego, fondoBotonNuevoJuego, true);
     textosJugadores = [];
 
     for (let i = 0; i < jugadores.length; i++) {
-      const textoJugador = scene.add.text(28, 430 + i * 24, '', {
-        fontSize: '17px',
-        color: '#ffffff'
-      });
+      const textoJugador = scene.add.text(195, 514 + i * 24, '', {
+        fontFamily: 'Courier New',
+        fontSize: '18px',
+        color: '#ffffff',
+        fontStyle: 'bold',
+        align: 'center'
+      }).setOrigin(0.5);
 
       textosJugadores.push(textoJugador);
     }
 
-    textoMesa = scene.add.text(195, 92, `Mesa: ${mesa}`, {
-      fontSize: '18px',
-      color: '#36d6c9',
-      fontStyle: 'bold'
-    }).setOrigin(0.5);
+    textoMesa.setVisible(true);
+    marcadorPanel.setVisible(true);
 
     actualizarMarcador();
 
@@ -519,25 +653,28 @@ function mostrarFormularioNuevaPartida(scene) {
   puntos = [];
   jugadorActual = 0;
   mesa = 0;
+  ganadorPartida = null;
 
   pirinola.setVisible(false);
   pirinola.setPosition(pirinola.xi, pirinola.yi);
   pirinola.angle = 0;
 
   textoTurno.setText('Ingresa jugadores');
+  textoTurno.setColor('#c8c8dc');
+  textoTurnoJugador.setText('');
   textoResultado.setText('');
+  textoDetalleResultado.setText('');
   textoResultado.setColor('#ffd36a');
 
-  botonGirar.setVisible(false);
+  mostrarBoton(botonGirar, fondoBotonGirar, false);
   botonGirar.disableInteractive();
-  botonSiguiente.setVisible(false);
-  botonReiniciar.setVisible(false);
-  botonNuevoJuego.setVisible(false);
+  mostrarBoton(botonSiguiente, fondoBotonSiguiente, false);
+  mostrarBoton(botonReiniciar, fondoBotonReiniciar, false);
+  mostrarBoton(botonNuevoJuego, fondoBotonNuevoJuego, false);
 
-  if (textoMesa) {
-    textoMesa.destroy();
-    textoMesa = null;
-  }
+  textoMesa.setVisible(false);
+  marcadorPanel.clear();
+  marcadorPanel.setVisible(false);
 
   for (let i = 0; i < textosJugadores.length; i++) {
     textosJugadores[i].destroy();
@@ -550,6 +687,7 @@ function mostrarFormularioNuevaPartida(scene) {
 function reiniciarPartidaActual() {
   mesa = 4;
   jugadorActual = 0;
+  ganadorPartida = null;
 
   for (let i = 0; i < puntos.length; i++) {
     puntos[i] = 4;
@@ -559,14 +697,17 @@ function reiniciarPartidaActual() {
   pirinola.setPosition(pirinola.xi, pirinola.yi);
   pirinola.angle = 0;
 
-  textoTurno.setText(`Turno de ${jugadores[jugadorActual]}`);
+  actualizarTextoTurno();
   textoResultado.setText('');
+  textoDetalleResultado.setText('');
   textoResultado.setColor('#ffd36a');
 
-  botonReiniciar.setVisible(false);
-  botonNuevoJuego.setVisible(true);
-  botonSiguiente.setVisible(false);
-  botonGirar.setVisible(true).setInteractive(true);
+  mostrarBoton(botonReiniciar, fondoBotonReiniciar, false);
+  mostrarBoton(botonNuevoJuego, fondoBotonNuevoJuego, true);
+  mostrarBoton(botonSiguiente, fondoBotonSiguiente, false);
+  botonGirar.setText('GIRAR');
+  mostrarBoton(botonGirar, fondoBotonGirar, true);
+  botonGirar.setInteractive(true);
 
   actualizarMarcador();
 }
@@ -578,14 +719,14 @@ function moverEnOcho(scene) {
   const path = new Phaser.Curves.Path(startX, startY);
 
   path.cubicBezierTo(
-    startX + 120, startY - 100,
-    startX + 120, startY + 100,
+    startX + 110, startY - 58,
+    startX + 110, startY + 86,
     startX, startY
   );
 
   path.cubicBezierTo(
-    startX - 120, startY - 100,
-    startX - 120, startY + 100,
+    startX - 110, startY - 58,
+    startX - 110, startY + 86,
     startX, startY
   );
 
@@ -606,7 +747,10 @@ function moverEnOcho(scene) {
 
 function girarPirinola(scene) {
   botonGirar.disableInteractive();
-  textoResultado.setText('Girando...');
+  textoResultado.setText('');
+  textoResultado.setColor('#36d6c9');
+  textoDetalleResultado.setText('');
+  mostrarBoton(botonGirar, fondoBotonGirar, false);
 
   const resultado = obtenerResultadoAleatorio();
   const vueltas = Phaser.Math.Between(4, 7);
@@ -625,21 +769,24 @@ function girarPirinola(scene) {
       const mesaAntes = mesa;
       const puntosAntes = puntos.slice();
       const mensaje = actualizarPuntos(resultado);
-      textoResultado.setText(`${resultado}\n${mensaje}`);
+      textoResultado.setText(formatearResultadoPrincipal(resultado));
+      textoDetalleResultado.setText(mensaje);
       animarFeedbackJugada(scene, resultado, mesaAntes, puntosAntes);
       revisarFinDePartida(scene);
 
       if (partidaTerminada()) {
-        botonSiguiente.setVisible(false);
-        botonGirar.setVisible(false);
+        mostrarBoton(botonSiguiente, fondoBotonSiguiente, false);
+        mostrarBoton(botonGirar, fondoBotonGirar, false);
         botonGirar.disableInteractive();
-        botonNuevoJuego.setVisible(true).setInteractive(true);
-        botonReiniciar.setVisible(true).setInteractive(true);
+        mostrarBoton(botonNuevoJuego, fondoBotonNuevoJuego, true);
+        botonNuevoJuego.setInteractive(true);
+        mostrarBoton(botonReiniciar, fondoBotonReiniciar, true);
+        botonReiniciar.setInteractive(true);
         return;
       }
 
-      botonSiguiente.setVisible(true);
-      botonGirar.setVisible(false);
+      mostrarBoton(botonSiguiente, fondoBotonSiguiente, true);
+      mostrarBoton(botonGirar, fondoBotonGirar, false);
     }
   });
 }
@@ -672,13 +819,16 @@ function obtenerResultadoAleatorio() {
 
 function siguienteJugador(scene) {
   jugadorActual = obtenerSiguienteJugadorActivo();
-  textoTurno.setText(`Turno de ${jugadores[jugadorActual]}`);
+  actualizarTextoTurno();
 
   textoResultado.setText('');
+  textoDetalleResultado.setText('');
   textoResultado.setColor('#ffd36a');
 
-  botonSiguiente.setVisible(false);
-  botonGirar.setVisible(true).setInteractive(true);
+  mostrarBoton(botonSiguiente, fondoBotonSiguiente, false);
+  botonGirar.setText('GIRAR');
+  mostrarBoton(botonGirar, fondoBotonGirar, true);
+  botonGirar.setInteractive(true);
 
   pirinola.setPosition(pirinola.xi, pirinola.yi);
 
@@ -877,20 +1027,34 @@ function mostrarMensajeFlotante(scene, mensaje, x, y, color) {
 }
 
 function actualizarMarcador() {
-  textoMesa.setText(`Mesa: ${mesa}`);
+  textoMesa.setText(`........ Pozo: ${mesa} ........`);
+
+  if (marcadorPanel) {
+    marcadorPanel.clear();
+    marcadorPanel.fillStyle(0x0b1028, 0.88);
+    marcadorPanel.fillRoundedRect(28, 492, 334, 124, 14);
+    marcadorPanel.lineStyle(2, 0x333a5c, 1);
+    marcadorPanel.strokeRoundedRect(28, 492, 334, 124, 14);
+  }
 
   for (let i = 0; i < textosJugadores.length; i++) {
     const activo = i === jugadorActual;
     const eliminado = puntos[i] <= 0;
+    const nombre = formatearNombreUI(jugadores[i], 11);
+    const esGanador = ganadorPartida === jugadores[i];
+    const estado = esGanador ? 'Ganador' : eliminado ? 'Sin fichas' : '';
+    const puntosTexto = puntos[i];
+    const separador = '.'.repeat(Math.max(4, 16 - nombre.length - Math.floor(estado.length / 2)));
 
     textosJugadores[i].setText(
-      eliminado ? `${jugadores[i]}: eliminado` : `${jugadores[i]}: ${puntos[i]}`
+      `${activo && !ganadorPartida ? '> ' : '  '}${nombre} ${separador} ${estado ? `${estado} ` : ''}${puntosTexto}`
     );
 
     textosJugadores[i].setStyle({
-      fontSize: activo && !eliminado ? '19px' : '17px',
-      color: eliminado ? '#7f7f95' : activo ? '#ffd36a' : '#ffffff',
-      fontStyle: activo && !eliminado ? 'bold' : 'normal'
+      fontFamily: 'Courier New',
+      fontSize: activo && !eliminado ? '18px' : '16px',
+      color: esGanador ? '#ffd36a' : eliminado ? '#ff8f8f' : activo ? '#36d6c9' : '#ffffff',
+      fontStyle: activo && !eliminado || esGanador ? 'bold' : 'normal'
     });
 
   }
@@ -943,12 +1107,21 @@ function revisarFinDePartida(scene) {
   const ganador = obtenerGanador();
 
   if (ganador) {
-    textoTurno.setText(`Gana ${ganador}`);
-    textoResultado.setText(`${textoResultado.text}\nFin de la partida`);
+    ganadorPartida = ganador;
+    textoTurnoJugador.setText('');
+    textoTurno.setText('FIN DE LA PARTIDA');
+    textoResultado.setText(`${formatearNombreUI(ganador, 12).toUpperCase()} GANA`);
+    textoResultado.setColor('#ffd36a');
+    textoDetalleResultado.setText(textoDetalleResultado.text || 'Partida terminada');
+    actualizarMarcador();
+    lanzarConfeti(scene);
     animarVictoria(scene);
   } else {
-    textoTurno.setText('Sin ganador');
-    textoResultado.setText(`${textoResultado.text}\nTodos quedaron fuera :(`);
+    ganadorPartida = null;
+    textoTurnoJugador.setText('');
+    textoTurno.setText('SIN GANADOR');
+    textoDetalleResultado.setText(`${textoDetalleResultado.text}\nTodos quedaron fuera :(`);
+    actualizarMarcador();
   }
 }
 
@@ -965,7 +1138,40 @@ function animarVictoria(scene) {
     ease: 'Back.easeOut',
     onComplete: () => {
       textoTurno.setScale(1);
-      textoTurno.setColor('#ffffff');
+      textoTurno.setColor('#c8c8dc');
     }
   });
+}
+
+function lanzarConfeti(scene) {
+  const colores = [0xffd36a, 0x36d6c9, 0xffffff, 0x75f0a5];
+
+  for (let i = 0; i < 34; i++) {
+    const angulo = Phaser.Math.FloatBetween(0, Math.PI * 2);
+    const radioInicial = Phaser.Math.Between(34, 84);
+    const x = pirinola.x + Math.cos(angulo) * radioInicial;
+    const y = pirinola.y + Math.sin(angulo) * radioInicial;
+    const pieza = scene.add.rectangle(
+      x,
+      y,
+      Phaser.Math.Between(4, 8),
+      Phaser.Math.Between(4, 10),
+      Phaser.Utils.Array.GetRandom(colores)
+    );
+
+    pieza.angle = Phaser.Math.Between(0, 180);
+
+    scene.tweens.add({
+      targets: pieza,
+      x: x + Math.cos(angulo) * Phaser.Math.Between(34, 80),
+      y: y + Math.sin(angulo) * Phaser.Math.Between(28, 72) + Phaser.Math.Between(14, 40),
+      angle: pieza.angle + Phaser.Math.Between(120, 360),
+      alpha: 0,
+      duration: Phaser.Math.Between(900, 1500),
+      ease: 'Cubic.easeOut',
+      onComplete: () => {
+        pieza.destroy();
+      }
+    });
+  }
 }
