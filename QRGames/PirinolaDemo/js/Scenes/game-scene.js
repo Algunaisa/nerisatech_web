@@ -187,17 +187,18 @@ function crearFormularioHTML(scene) {
       color: white;
       font-family: 'Courier New', monospace;
       z-index: 5;
+      min-height: 100dvh;
     ">
       <div style="
-        width: min(390px, 100vw);
-        min-height: 700px;
-        padding: 36px 26px 26px;
+        width: min(390px, 100%);
+        min-height: 100dvh;
+        padding: clamp(18px, 5dvh, 32px) 18px 18px;
         box-sizing: border-box;
         text-align: center;
       ">
         <div style="
           color: #ffffff;
-          font-size: 48px;
+          font-size: clamp(38px, 12vw, 48px);
           line-height: 0.95;
           font-weight: 700;
           letter-spacing: 0;
@@ -207,19 +208,19 @@ function crearFormularioHTML(scene) {
         </div>
 
         <div style="
-          margin-top: 24px;
+          margin-top: 16px;
           color: #c8c8dc;
-          font-size: 17px;
+          font-size: clamp(14px, 4vw, 17px);
           font-weight: 700;
         ">
           Crea una mesa para jugar
         </div>
 
         <section style="
-          margin-top: 34px;
-          padding: 22px 22px 24px;
+          margin-top: clamp(18px, 5dvh, 28px);
+          padding: 16px 16px 18px;
           border: 2px solid #333a5c;
-          border-radius: 18px;
+          border-radius: 16px;
           background: rgba(15, 20, 45, 0.92);
           box-shadow: 0 0 22px rgba(54, 214, 201, 0.06);
         ">
@@ -228,7 +229,7 @@ function crearFormularioHTML(scene) {
             align-items: center;
             gap: 12px;
             color: #36d6c9;
-            font-size: 24px;
+            font-size: 21px;
             font-weight: 700;
             text-align: left;
           ">
@@ -245,63 +246,63 @@ function crearFormularioHTML(scene) {
 
           <div style="
             display: grid;
-            grid-template-columns: 76px 1fr 76px;
-            gap: 14px;
+            grid-template-columns: 62px 1fr 62px;
+            gap: 12px;
             align-items: center;
-            margin-top: 30px;
+            margin-top: 20px;
           ">
             <button id="btnMenosJugadores" type="button" style="
-              width: 76px;
-              height: 76px;
+              width: 62px;
+              height: 62px;
               border: none;
               border-radius: 50%;
               background: #ffd36a;
               color: #050817;
-              font-size: 52px;
+              font-size: 42px;
               line-height: 1;
               box-shadow: 0 0 14px rgba(255, 211, 106, 0.35);
             ">-</button>
 
             <div id="displayJugadores" style="
-              height: 76px;
+              height: 62px;
               display: flex;
               align-items: center;
               justify-content: center;
               border: 2px solid #333a5c;
-              border-radius: 18px;
+              border-radius: 16px;
               background: #0b1028;
               color: #ffffff;
-              font-size: 42px;
+              font-size: 36px;
               font-weight: 700;
             ">2</div>
 
             <button id="btnMasJugadores" type="button" style="
-              width: 76px;
-              height: 76px;
+              width: 62px;
+              height: 62px;
               border: none;
               border-radius: 50%;
               background: #ffd36a;
               color: #050817;
-              font-size: 52px;
+              font-size: 42px;
               line-height: 1;
               box-shadow: 0 0 14px rgba(255, 211, 106, 0.35);
             ">+</button>
           </div>
 
           <div style="
-            margin-top: 18px;
+            margin-top: 12px;
             color: #c8c8dc;
-            font-size: 16px;
+            font-size: 14px;
           ">
             Maximo 4 jugadores
           </div>
         </section>
 
         <section style="
-          margin-top: 18px;
-          padding: 22px;
+          margin-top: 14px;
+          padding: 16px;
           border: 2px solid #333a5c;
-          border-radius: 18px;
+          border-radius: 16px;
           background: rgba(15, 20, 45, 0.92);
         ">
           <div style="
@@ -309,7 +310,7 @@ function crearFormularioHTML(scene) {
             align-items: center;
             gap: 12px;
             color: #36d6c9;
-            font-size: 24px;
+            font-size: 21px;
             font-weight: 700;
             text-align: left;
           ">
@@ -322,19 +323,19 @@ function crearFormularioHTML(scene) {
             border-top: 1px dashed rgba(54, 214, 201, 0.55);
           "></div>
 
-          <div id="camposJugadores" style="margin-top: 22px;"></div>
+          <div id="camposJugadores" style="margin-top: 16px;"></div>
         </section>
 
         <button id="btnCrear" style="
-          width: 78%;
-          margin-top: 34px;
-          padding: 20px 18px;
+          width: 82%;
+          margin-top: clamp(18px, 4dvh, 28px);
+          padding: 16px 14px;
           border: none;
           border-radius: 16px;
           background: #ffd36a;
           color: #050817;
           font-family: 'Courier New', monospace;
-          font-size: 30px;
+          font-size: clamp(24px, 7vw, 30px);
           font-weight: 700;
           letter-spacing: 0;
           box-shadow: 0 0 24px rgba(255, 211, 106, 0.65);
@@ -344,7 +345,7 @@ function crearFormularioHTML(scene) {
           display: flex;
           align-items: center;
           gap: 14px;
-          margin: 34px auto 0;
+          margin: 24px auto 0;
           width: 78%;
           color: rgba(54, 214, 201, 0.55);
         ">
@@ -364,9 +365,9 @@ function crearFormularioHTML(scene) {
         </div>
 
         <div style="
-          margin-top: 18px;
+          margin-top: 14px;
           color: #c8c8dc;
-          font-size: 15px;
+          font-size: 14px;
           font-weight: 700;
         ">
           QR Games by Nerisa Tech
@@ -470,11 +471,11 @@ function renderizarCamposJugadores() {
     input.value = nombresActuales[i] || '';
     input.style.cssText = `
       width: 100%;
-      margin-top: ${i === 0 ? '0' : '12px'};
-      padding: 14px 16px;
+      margin-top: ${i === 0 ? '0' : '10px'};
+      padding: 11px 14px;
       box-sizing: border-box;
       font-family: 'Courier New', monospace;
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 700;
       color: #ffffff;
       background: #0b1028;

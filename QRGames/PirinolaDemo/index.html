@@ -16,7 +16,7 @@
 
 <meta property="og:image:alt" content="Pirinola Pocket, entra y juega con amigos sin Descargarnada." />
 
-<meta property="og:url" content="nerisatech.com/QRGames/Pirinola Demo/index.html?v=1" />
+<meta property="og:url" content="nerisatech.com/QRGames/Pirinola Demo/index.html?v=2" />
 
   <title>Pirinola QR Game</title>
   <style>
@@ -24,11 +24,17 @@
       margin: 0;
       background: #101020;
       font-family: Arial, sans-serif;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+
+    canvas {
+      display: block;
     }
   </style>
 </head>
 <body>
   <script src="js/lib/phaser.js"></script>
-  <script src="js/Scenes/game-scene.js"></script>
+  <script src="js/Scenes/game-scene.js?v=2"></script>
 </body>
 </html>
