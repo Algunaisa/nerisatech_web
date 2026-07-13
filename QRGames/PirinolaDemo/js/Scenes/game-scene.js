@@ -59,9 +59,9 @@ const perfilesProbabilidad = {
   ],
   intenso: [
     { resultado: 'Toma 1', peso: 1 },
-    { resultado: 'Toma 2', peso: 2 },
-    { resultado: 'Toma Todo', peso: 3 },
-    { resultado: 'Todos Ponen', peso: 3 },
+    { resultado: 'Toma 2', peso: 3 },
+    { resultado: 'Toma Todo', peso: 2 },
+    { resultado: 'Todos Ponen', peso: 2 },
     { resultado: 'Pon 1', peso: 1 },
     { resultado: 'Pon 2', peso: 3 }
   ],
@@ -69,9 +69,9 @@ const perfilesProbabilidad = {
     { resultado: 'Toma 1', peso: 0 },
     { resultado: 'Toma 2', peso: 0 },
     { resultado: 'Toma Todo', peso: 0 },
-    { resultado: 'Todos Ponen', peso: 3 },
+    { resultado: 'Todos Ponen', peso: 1 },
     { resultado: 'Pon 1', peso: 1 },
-    { resultado: 'Pon 2', peso: 2 }
+    { resultado: 'Pon 2', peso: 1 }
   ]
 };
 
@@ -230,26 +230,7 @@ function create() {
 }
 
 function crearFooterJuego(scene) {
-  scene.add.text(95, 678, '..............', {
-    fontFamily: 'Courier New',
-    fontSize: '13px',
-    color: '#36d6c9'
-  }).setOrigin(0.5).setAlpha(0.55);
-
-  scene.add.text(295, 678, '..............', {
-    fontFamily: 'Courier New',
-    fontSize: '13px',
-    color: '#36d6c9'
-  }).setOrigin(0.5).setAlpha(0.55);
-
-  scene.add.text(195, 674, 'o', {
-    fontFamily: 'Courier New',
-    fontSize: '22px',
-    color: '#36d6c9',
-    fontStyle: 'bold'
-  }).setOrigin(0.5);
-
-  scene.add.text(195, 694, 'QR Games by Nerisa Tech', {
+  scene.add.text(195, 684, 'QR Games by Nerisa Tech', {
     fontFamily: 'Courier New',
     fontSize: '14px',
     color: '#c8c8dc',
@@ -364,7 +345,6 @@ function crearFormularioHTML(scene) {
             font-weight: 700;
             text-align: left;
           ">
-            <span style="font-size: 28px; line-height: 1;">oo</span>
             <span>Jugadores</span>
           </div>
 
@@ -445,7 +425,6 @@ function crearFormularioHTML(scene) {
             font-weight: 700;
             text-align: left;
           ">
-            <span style="font-size: 30px; line-height: 1;">o</span>
             <span>Nombres</span>
           </div>
 
