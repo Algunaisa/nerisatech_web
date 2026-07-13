@@ -38,6 +38,7 @@ let textosJugadores = [];
 let perfilProbabilidad = 'intenso';
 let formularioPartida;
 let ganadorPartida = null;
+const maximoCaracteresNombre = 11;
 
 const perfilesProbabilidad = {
   clasico: [
@@ -282,7 +283,7 @@ function actualizarTextoTurno() {
   textoTurno.setColor('#c8c8dc');
   textoTurno.setX(195);
   textoTurno.setText(jugador ? 'ES TURNO DE' : 'INGRESA JUGADORES');
-  textoTurnoJugador.setText(jugador ? formatearNombreUI(jugador, 12).toUpperCase() : '');
+  textoTurnoJugador.setText(jugador ? formatearNombreUI(jugador, maximoCaracteresNombre).toUpperCase() : '');
 }
 
 function formatearResultadoPrincipal(resultado) {
@@ -600,7 +601,7 @@ function renderizarCamposJugadores() {
 
     input.className = 'nombreJugador';
     input.type = 'text';
-    input.maxLength = 14;
+    input.maxLength = maximoCaracteresNombre;
     input.placeholder = `Nombre ${i + 1}`;
     input.value = nombresActuales[i] || '';
     input.style.cssText = `
@@ -1027,7 +1028,7 @@ function mostrarMensajeFlotante(scene, mensaje, x, y, color) {
 }
 
 function actualizarMarcador() {
-  textoMesa.setText(`........ Pozo: ${mesa} ........`);
+  textoMesa.setText(`..... Mesa: ${mesa} Fichas .....`);
 
   if (marcadorPanel) {
     marcadorPanel.clear();
@@ -1040,14 +1041,14 @@ function actualizarMarcador() {
   for (let i = 0; i < textosJugadores.length; i++) {
     const activo = i === jugadorActual;
     const eliminado = puntos[i] <= 0;
-    const nombre = formatearNombreUI(jugadores[i], 11);
+    const nombre = formatearNombreUI(jugadores[i], maximoCaracteresNombre);
     const esGanador = ganadorPartida === jugadores[i];
     const estado = esGanador ? 'Ganador' : eliminado ? 'Sin fichas' : '';
     const puntosTexto = puntos[i];
     const separador = '.'.repeat(Math.max(4, 16 - nombre.length - Math.floor(estado.length / 2)));
 
     textosJugadores[i].setText(
-      `${activo && !ganadorPartida ? '> ' : '  '}${nombre} ${separador} ${estado ? `${estado} ` : ''}${puntosTexto}`
+      `${activo && !ganadorPartida ? '> ' : '  '}${nombre} ${separador} ${estado ? `${estado} ` : `${puntosTexto} Fichas`}`
     );
 
     textosJugadores[i].setStyle({
@@ -1110,7 +1111,7 @@ function revisarFinDePartida(scene) {
     ganadorPartida = ganador;
     textoTurnoJugador.setText('');
     textoTurno.setText('FIN DE LA PARTIDA');
-    textoResultado.setText(`${formatearNombreUI(ganador, 12).toUpperCase()} GANA`);
+    textoResultado.setText(`${formatearNombreUI(ganador, maximoCaracteresNombre).toUpperCase()} GANA`);
     textoResultado.setColor('#ffd36a');
     textoDetalleResultado.setText(textoDetalleResultado.text || 'Partida terminada');
     actualizarMarcador();
