@@ -211,7 +211,7 @@ function create() {
   fondoBotonReiniciar = crearFondoBoton(scene, 195, 646, 224, 42, 0x36d6c9);
   fondoBotonReiniciar.setVisible(false);
 
-  botonReiniciar = scene.add.text(195, 646, 'OTRA VEZ', {
+  botonReiniciar = scene.add.text(195, 646, 'JUGAR OTRA VEZ', {
     fontFamily: 'Courier New',
     fontSize: '23px',
     color: '#101020',
