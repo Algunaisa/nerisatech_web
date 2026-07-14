@@ -1,18 +1,61 @@
-const config = {
-  type: Phaser.AUTO,
-  width: 390,
-  height: 700,
-  backgroundColor: '#16162a',
-  scale: {
-    mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH
+const temaBase = {
+  marca: 'Nerisa Tech',
+  titulo: 'Pirinola Pocket',
+  subtituloInicio: 'Crea una mesa para jugar',
+  footer: 'QR Games by Nerisa Tech',
+  textos: {
+    seccionJugadores: 'Jugadores',
+    rangoJugadores: 'Maximo 4 jugadores',
+    seccionNombres: 'Nombres',
+    botonCrear: 'CREAR MESA'
   },
-  scene: {
-    create
+  maximoCaracteresNombre: 11,
+  colores: {
+    fondo: '#16162a',
+    fondoInicioA: '#121735',
+    fondoInicioB: '#070b20',
+    fondoInicioC: '#030615',
+    panel: '#0b1028',
+    panelBorde: '#333a5c',
+    principal: '#36d6c9',
+    acento: '#ffd36a',
+    texto: '#ffffff',
+    textoSecundario: '#c8c8dc',
+    textoOscuro: '#101020',
+    error: '#ff8f8f',
+    exito: '#75f0a5'
+  },
+  fuentes: {
+    titulo: 'Courier New',
+    texto: 'Courier New'
+  },
+  imagenes: {
+    logoInicio: { src: '', maxWidth: 220, maxHeight: 90 },
+    fondoInicio: { src: '', mode: 'cover', alpha: 1 },
+    fondoJuego: { src: '', mode: 'cover', alpha: 0.35 }
   }
 };
 
-new Phaser.Game(config);
+let tema = temaBase;
+
+cargarTema().then(() => {
+  const config = {
+    type: Phaser.AUTO,
+    width: 390,
+    height: 700,
+    backgroundColor: colorTema('fondo'),
+    scale: {
+      mode: Phaser.Scale.FIT,
+      autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    scene: {
+      preload,
+      create
+    }
+  };
+
+  new Phaser.Game(config);
+});
 
 let jugadores = [];
 let puntos = [];
@@ -38,7 +81,117 @@ let textosJugadores = [];
 let perfilProbabilidad = 'intenso';
 let formularioPartida;
 let ganadorPartida = null;
-const maximoCaracteresNombre = 11;
+let maximoCaracteresNombre = temaBase.maximoCaracteresNombre;
+
+async function cargarTema() {
+  const parametros = new URLSearchParams(window.location.search);
+  const nombreTema = sanitizarNombreTema(parametros.get('theme') || 'default');
+
+  try {
+    const respuesta = await fetch(`config/${nombreTema}.json`, { cache: 'no-store' });
+
+    if (!respuesta.ok) {
+      throw new Error(`No se pudo cargar config/${nombreTema}.json`);
+    }
+
+    const temaRemoto = await respuesta.json();
+    tema = mezclarObjetos(temaBase, temaRemoto);
+  } catch (error) {
+    console.warn('Usando tema base:', error);
+    tema = temaBase;
+  }
+
+  maximoCaracteresNombre = tema.maximoCaracteresNombre || temaBase.maximoCaracteresNombre;
+}
+
+function sanitizarNombreTema(nombre) {
+  return String(nombre).replace(/[^a-zA-Z0-9_-]/g, '') || 'default';
+}
+
+function mezclarObjetos(base, cambios) {
+  const salida = Array.isArray(base) ? [...base] : { ...base };
+
+  for (const llave in cambios) {
+    if (
+      cambios[llave] &&
+      typeof cambios[llave] === 'object' &&
+      !Array.isArray(cambios[llave]) &&
+      base[llave]
+    ) {
+      salida[llave] = mezclarObjetos(base[llave], cambios[llave]);
+    } else {
+      salida[llave] = cambios[llave];
+    }
+  }
+
+  return salida;
+}
+
+function colorTema(nombre) {
+  return tema.colores[nombre] || temaBase.colores[nombre] || '#ffffff';
+}
+
+function colorNumero(nombre) {
+  return Number(`0x${colorTema(nombre).replace('#', '')}`);
+}
+
+function fuenteTema(tipo = 'texto') {
+  return tema.fuentes[tipo] || temaBase.fuentes[tipo] || 'Arial';
+}
+
+function textoTema(nombre) {
+  return tema[nombre] || temaBase[nombre] || '';
+}
+
+function textoUITema(nombre) {
+  return tema.textos[nombre] || temaBase.textos[nombre] || '';
+}
+
+function imagenTema(nombre) {
+  return tema.imagenes[nombre] || temaBase.imagenes[nombre] || {};
+}
+
+function obtenerFondoInicioCSS() {
+  const fondo = imagenTema('fondoInicio');
+
+  if (fondo.src) {
+    return `linear-gradient(rgba(3, 6, 21, ${1 - (fondo.alpha ?? 1) * 0.35}), rgba(3, 6, 21, ${1 - (fondo.alpha ?? 1) * 0.35})), url('${fondo.src}') center / ${fondo.mode || 'cover'} no-repeat`;
+  }
+
+  return `radial-gradient(circle at top, ${colorTema('fondoInicioA')} 0%, ${colorTema('fondoInicioB')} 55%, ${colorTema('fondoInicioC')} 100%)`;
+}
+
+function crearLogoInicioHTML() {
+  const logo = imagenTema('logoInicio');
+
+  if (!logo.src) {
+    return '';
+  }
+
+  return `
+    <img src="${logo.src}" alt="${textoTema('marca')}" style="
+      display: block;
+      max-width: ${logo.maxWidth || 220}px;
+      max-height: ${logo.maxHeight || 90}px;
+      width: auto;
+      height: auto;
+      margin: 0 auto 14px;
+      object-fit: contain;
+    " />
+  `;
+}
+
+function preload() {
+  cargarImagenTema(this, 'fondoJuego');
+}
+
+function cargarImagenTema(scene, nombre) {
+  const imagen = imagenTema(nombre);
+
+  if (imagen.src) {
+    scene.load.image(nombre, imagen.src);
+  }
+}
 
 const perfilesProbabilidad = {
   clasico: [
@@ -78,56 +231,58 @@ const perfilesProbabilidad = {
 function create() {
   const scene = this;
 
-  textoTitulo = scene.add.text(195, 58, 'Pirinola\nPocket', {
-    fontFamily: 'Courier New',
+  crearFondoJuego(scene);
+
+  textoTitulo = scene.add.text(195, 58, textoTema('titulo').replace(' ', '\n'), {
+    fontFamily: fuenteTema('titulo'),
     fontSize: '38px',
-    color: '#ffffff',
+    color: colorTema('texto'),
     fontStyle: 'bold',
     align: 'center'
   }).setOrigin(0.5);
-  textoTitulo.setShadow(0, 0, '#ffffff', 10, true, true);
+  textoTitulo.setShadow(0, 0, colorTema('texto'), 10, true, true);
 
   textoTurno = scene.add.text(195, 138, 'INGRESA JUGADORES', {
-    fontFamily: 'Courier New',
+    fontFamily: fuenteTema(),
     fontSize: '19px',
-    color: '#c8c8dc',
+    color: colorTema('textoSecundario'),
     fontStyle: 'bold',
     align: 'center',
     wordWrap: { width: 330 }
   }).setOrigin(0.5);
 
   textoTurnoJugador = scene.add.text(195, 160, '', {
-    fontFamily: 'Courier New',
+    fontFamily: fuenteTema(),
     fontSize: '22px',
-    color: '#36d6c9',
+    color: colorTema('principal'),
     fontStyle: 'bold',
     align: 'center',
     wordWrap: { width: 300 }
   }).setOrigin(0.5);
-  textoTurnoJugador.setShadow(0, 0, '#36d6c9', 10, true, true);
+  textoTurnoJugador.setShadow(0, 0, colorTema('principal'), 10, true, true);
 
   textoMesa = scene.add.text(195, 190, '', {
-    fontFamily: 'Courier New',
+    fontFamily: fuenteTema(),
     fontSize: '21px',
-    color: '#36d6c9',
+    color: colorTema('principal'),
     fontStyle: 'bold'
   }).setOrigin(0.5);
   textoMesa.setVisible(false);
 
   textoResultado = scene.add.text(195, 426, '', {
-    fontFamily: 'Courier New',
+    fontFamily: fuenteTema(),
     fontSize: '32px',
-    color: '#ffd36a',
+    color: colorTema('acento'),
     fontStyle: 'bold',
     align: 'center',
     wordWrap: { width: 340 }
   }).setOrigin(0.5);
-  textoResultado.setShadow(0, 0, '#ffd36a', 10, true, true);
+  textoResultado.setShadow(0, 0, colorTema('acento'), 10, true, true);
 
   textoDetalleResultado = scene.add.text(195, 464, '', {
-    fontFamily: 'Courier New',
+    fontFamily: fuenteTema(),
     fontSize: '17px',
-    color: '#c8c8dc',
+    color: colorTema('textoSecundario'),
     fontStyle: 'bold',
     align: 'center',
     wordWrap: { width: 330 }
@@ -152,24 +307,24 @@ function create() {
       0, 90,
       0, 30
     ],
-    0xffd36a
+    colorNumero('acento')
   );
 
   base.setOrigin(0.5);
-  base.setStrokeStyle(4, 0xffffff);
+  base.setStrokeStyle(4, colorNumero('texto'));
 
-  const centro = scene.add.circle(0, 0, 10, 0x36d6c9);
+  const centro = scene.add.circle(0, 0, 10, colorNumero('principal'));
 
   pirinola.add([base, centro]);
   pirinola.setVisible(false);
 
-  fondoBotonGirar = crearFondoBoton(scene, 195, 646, 172, 42, 0x36d6c9);
+  fondoBotonGirar = crearFondoBoton(scene, 195, 646, 172, 42, colorNumero('principal'));
   fondoBotonGirar.setVisible(false);
 
   botonGirar = scene.add.text(195, 646, 'GIRAR', {
-    fontFamily: 'Courier New',
+    fontFamily: fuenteTema(),
     fontSize: '25px',
-    color: '#101020',
+    color: colorTema('textoOscuro'),
     fontStyle: 'bold',
   })
   .setOrigin(0.5)
@@ -178,13 +333,13 @@ function create() {
 
   botonGirar.on('pointerdown', () => girarPirinola(scene));
 
-  fondoBotonSiguiente = crearFondoBoton(scene, 195, 646, 206, 42, 0x36d6c9);
+  fondoBotonSiguiente = crearFondoBoton(scene, 195, 646, 206, 42, colorNumero('principal'));
   fondoBotonSiguiente.setVisible(false);
 
   botonSiguiente = scene.add.text(195, 646, 'SIGUIENTE', {
-    fontFamily: 'Courier New',
+    fontFamily: fuenteTema(),
     fontSize: '24px',
-    color: '#101020',
+    color: colorTema('textoOscuro'),
     fontStyle: 'bold',
   })
   .setOrigin(0.5)
@@ -193,13 +348,13 @@ function create() {
 
   botonSiguiente.on('pointerdown', () => siguienteJugador(scene));
 
-  fondoBotonNuevoJuego = crearFondoBoton(scene, 344, 24, 76, 38, 0xffd36a, 8);
+  fondoBotonNuevoJuego = crearFondoBoton(scene, 344, 24, 76, 38, colorNumero('acento'), 8);
   fondoBotonNuevoJuego.setVisible(false);
 
   botonNuevoJuego = scene.add.text(344, 24, 'NUEVO', {
-    fontFamily: 'Courier New',
+    fontFamily: fuenteTema(),
     fontSize: '15px',
-    color: '#101020',
+    color: colorTema('textoOscuro'),
     fontStyle: 'bold',
   })
   .setOrigin(0.5)
@@ -208,13 +363,13 @@ function create() {
 
   botonNuevoJuego.on('pointerdown', () => mostrarFormularioNuevaPartida(scene));
 
-  fondoBotonReiniciar = crearFondoBoton(scene, 195, 646, 224, 42, 0x36d6c9);
+  fondoBotonReiniciar = crearFondoBoton(scene, 195, 646, 224, 42, colorNumero('principal'));
   fondoBotonReiniciar.setVisible(false);
 
   botonReiniciar = scene.add.text(195, 646, 'JUGAR OTRA VEZ', {
-    fontFamily: 'Courier New',
+    fontFamily: fuenteTema(),
     fontSize: '23px',
-    color: '#101020',
+    color: colorTema('textoOscuro'),
     fontStyle: 'bold',
   })
   .setOrigin(0.5)
@@ -229,11 +384,28 @@ function create() {
   crearFooterJuego(scene);
 }
 
+function crearFondoJuego(scene) {
+  const fondo = imagenTema('fondoJuego');
+
+  if (!fondo.src || !scene.textures.exists('fondoJuego')) {
+    return;
+  }
+
+  const imagen = scene.add.image(195, 350, 'fondoJuego');
+  const escalaX = 390 / imagen.width;
+  const escalaY = 700 / imagen.height;
+  const escala = fondo.mode === 'contain' ? Math.min(escalaX, escalaY) : Math.max(escalaX, escalaY);
+
+  imagen.setScale(escala);
+  imagen.setAlpha(fondo.alpha ?? 1);
+  imagen.setDepth(-10);
+}
+
 function crearFooterJuego(scene) {
-  scene.add.text(195, 684, 'QR Games by Nerisa Tech', {
-    fontFamily: 'Courier New',
+  scene.add.text(195, 684, textoTema('footer'), {
+    fontFamily: fuenteTema(),
     fontSize: '14px',
-    color: '#c8c8dc',
+    color: colorTema('textoSecundario'),
     fontStyle: 'bold'
   }).setOrigin(0.5);
 }
@@ -243,7 +415,7 @@ function crearFondoBoton(scene, x, y, ancho, alto, color, radio = 12) {
 
   fondo.fillStyle(color, 1);
   fondo.fillRoundedRect(-ancho / 2, -alto / 2, ancho, alto, radio);
-  fondo.lineStyle(2, 0xffffff, 0.55);
+  fondo.lineStyle(2, colorNumero('texto'), 0.55);
   fondo.strokeRoundedRect(-ancho / 2, -alto / 2, ancho, alto, radio);
   fondo.setPosition(x, y);
 
@@ -261,7 +433,7 @@ function mostrarBoton(texto, fondo, visible) {
 function actualizarTextoTurno() {
   const jugador = jugadores[jugadorActual] || '';
 
-  textoTurno.setColor('#c8c8dc');
+  textoTurno.setColor(colorTema('textoSecundario'));
   textoTurno.setX(195);
   textoTurno.setText(jugador ? 'ES TURNO DE' : 'INGRESA JUGADORES');
   textoTurnoJugador.setText(jugador ? formatearNombreUI(jugador, maximoCaracteresNombre).toUpperCase() : '');
@@ -295,9 +467,9 @@ function crearFormularioHTML(scene) {
       justify-content: center;
       align-items: flex-start;
       overflow-y: auto;
-      background: radial-gradient(circle at top, #121735 0%, #070b20 55%, #030615 100%);
-      color: white;
-      font-family: 'Courier New', monospace;
+      background: ${obtenerFondoInicioCSS()};
+      color: ${colorTema('texto')};
+      font-family: '${fuenteTema()}', monospace;
       z-index: 5;
       min-height: 100dvh;
     ">
@@ -309,48 +481,49 @@ function crearFormularioHTML(scene) {
         text-align: center;
       ">
         <div style="
-          color: #ffffff;
+          color: ${colorTema('texto')};
           font-size: clamp(38px, 12vw, 48px);
           line-height: 0.95;
           font-weight: 700;
           letter-spacing: 0;
-          text-shadow: 0 0 12px rgba(255, 255, 255, 0.75);
+          text-shadow: 0 0 12px ${colorTema('texto')};
         ">
-          Pirinola<br />Pocket
+          ${crearLogoInicioHTML()}
+          ${textoTema('titulo').replace(' ', '<br />')}
         </div>
 
         <div style="
           margin-top: 16px;
-          color: #c8c8dc;
+          color: ${colorTema('textoSecundario')};
           font-size: clamp(14px, 4vw, 17px);
           font-weight: 700;
         ">
-          Crea una mesa para jugar
+          ${textoTema('subtituloInicio')}
         </div>
 
         <section style="
           margin-top: clamp(18px, 5dvh, 28px);
           padding: 16px 16px 18px;
-          border: 2px solid #333a5c;
+          border: 2px solid ${colorTema('panelBorde')};
           border-radius: 16px;
-          background: rgba(15, 20, 45, 0.92);
+          background: ${colorTema('panel')};
           box-shadow: 0 0 22px rgba(54, 214, 201, 0.06);
         ">
           <div style="
             display: flex;
             align-items: center;
             gap: 12px;
-            color: #36d6c9;
+            color: ${colorTema('principal')};
             font-size: 21px;
             font-weight: 700;
             text-align: left;
           ">
-            <span>Jugadores</span>
+            <span>${textoUITema('seccionJugadores')}</span>
           </div>
 
           <div style="
             margin-top: 12px;
-            border-top: 1px dashed rgba(54, 214, 201, 0.55);
+            border-top: 1px dashed ${colorTema('principal')};
           "></div>
 
           <input id="numJugadores" type="hidden" min="2" max="4" value="2" />
@@ -367,8 +540,8 @@ function crearFormularioHTML(scene) {
               height: 62px;
               border: none;
               border-radius: 50%;
-              background: #ffd36a;
-              color: #050817;
+              background: ${colorTema('acento')};
+              color: ${colorTema('textoOscuro')};
               font-size: 42px;
               line-height: 1;
               box-shadow: 0 0 14px rgba(255, 211, 106, 0.35);
@@ -379,10 +552,10 @@ function crearFormularioHTML(scene) {
               display: flex;
               align-items: center;
               justify-content: center;
-              border: 2px solid #333a5c;
+              border: 2px solid ${colorTema('panelBorde')};
               border-radius: 16px;
-              background: #0b1028;
-              color: #ffffff;
+              background: ${colorTema('panel')};
+              color: ${colorTema('texto')};
               font-size: 36px;
               font-weight: 700;
             ">2</div>
@@ -392,8 +565,8 @@ function crearFormularioHTML(scene) {
               height: 62px;
               border: none;
               border-radius: 50%;
-              background: #ffd36a;
-              color: #050817;
+              background: ${colorTema('acento')};
+              color: ${colorTema('textoOscuro')};
               font-size: 42px;
               line-height: 1;
               box-shadow: 0 0 14px rgba(255, 211, 106, 0.35);
@@ -402,35 +575,35 @@ function crearFormularioHTML(scene) {
 
           <div style="
             margin-top: 12px;
-            color: #c8c8dc;
+            color: ${colorTema('textoSecundario')};
             font-size: 14px;
           ">
-            Maximo 4 jugadores
+            ${textoUITema('rangoJugadores')}
           </div>
         </section>
 
         <section style="
           margin-top: 14px;
           padding: 16px;
-          border: 2px solid #333a5c;
+          border: 2px solid ${colorTema('panelBorde')};
           border-radius: 16px;
-          background: rgba(15, 20, 45, 0.92);
+          background: ${colorTema('panel')};
         ">
           <div style="
             display: flex;
             align-items: center;
             gap: 12px;
-            color: #36d6c9;
+            color: ${colorTema('principal')};
             font-size: 21px;
             font-weight: 700;
             text-align: left;
           ">
-            <span>Nombres</span>
+            <span>${textoUITema('seccionNombres')}</span>
           </div>
 
           <div style="
             margin-top: 12px;
-            border-top: 1px dashed rgba(54, 214, 201, 0.55);
+            border-top: 1px dashed ${colorTema('principal')};
           "></div>
 
           <div id="camposJugadores" style="margin-top: 16px;"></div>
@@ -442,14 +615,14 @@ function crearFormularioHTML(scene) {
           padding: 16px 14px;
           border: none;
           border-radius: 16px;
-          background: #ffd36a;
-          color: #050817;
-          font-family: 'Courier New', monospace;
+          background: ${colorTema('acento')};
+          color: ${colorTema('textoOscuro')};
+          font-family: '${fuenteTema()}', monospace;
           font-size: clamp(24px, 7vw, 30px);
           font-weight: 700;
           letter-spacing: 0;
           box-shadow: 0 0 24px rgba(255, 211, 106, 0.65);
-        ">CREAR MESA</button>
+        ">${textoUITema('botonCrear')}</button>
 
         <div style="
           display: flex;
@@ -457,30 +630,30 @@ function crearFormularioHTML(scene) {
           gap: 14px;
           margin: 24px auto 0;
           width: 78%;
-          color: rgba(54, 214, 201, 0.55);
+          color: ${colorTema('principal')};
         ">
-          <div style="flex: 1; border-top: 1px dashed rgba(54, 214, 201, 0.45);"></div>
+          <div style="flex: 1; border-top: 1px dashed ${colorTema('principal')};"></div>
           <div style="
             width: 26px;
             height: 26px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 3px solid #ffd36a;
+            border: 3px solid ${colorTema('acento')};
             border-radius: 50%;
-            color: #36d6c9;
+            color: ${colorTema('principal')};
             font-size: 18px;
           ">o</div>
-          <div style="flex: 1; border-top: 1px dashed rgba(54, 214, 201, 0.45);"></div>
+          <div style="flex: 1; border-top: 1px dashed ${colorTema('principal')};"></div>
         </div>
 
         <div style="
           margin-top: 14px;
-          color: #c8c8dc;
+          color: ${colorTema('textoSecundario')};
           font-size: 14px;
           font-weight: 700;
         ">
-          QR Games by Nerisa Tech
+          ${textoTema('footer')}
         </div>
       </div>
     </div>
@@ -527,7 +700,7 @@ function crearFormularioHTML(scene) {
     actualizarTextoTurno();
     textoResultado.setText('');
     textoDetalleResultado.setText('');
-    textoResultado.setColor('#ffd36a');
+    textoResultado.setColor(colorTema('acento'));
     pirinola.setVisible(true);
     botonGirar.setText('GIRAR');
     mostrarBoton(botonGirar, fondoBotonGirar, true);
@@ -538,9 +711,9 @@ function crearFormularioHTML(scene) {
 
     for (let i = 0; i < jugadores.length; i++) {
       const textoJugador = scene.add.text(195, 514 + i * 24, '', {
-        fontFamily: 'Courier New',
+        fontFamily: fuenteTema(),
         fontSize: '18px',
-        color: '#ffffff',
+        color: colorTema('texto'),
         fontStyle: 'bold',
         align: 'center'
       }).setOrigin(0.5);
@@ -588,12 +761,12 @@ function renderizarCamposJugadores() {
       margin-top: ${i === 0 ? '0' : '10px'};
       padding: 11px 14px;
       box-sizing: border-box;
-      font-family: 'Courier New', monospace;
+      font-family: '${fuenteTema()}', monospace;
       font-size: 20px;
       font-weight: 700;
-      color: #ffffff;
-      background: #0b1028;
-      border: 2px solid #333a5c;
+      color: ${colorTema('texto')};
+      background: ${colorTema('panel')};
+      border: 2px solid ${colorTema('panelBorde')};
       border-radius: 14px;
       outline: none;
       box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.25);
@@ -640,11 +813,11 @@ function mostrarFormularioNuevaPartida(scene) {
   pirinola.angle = 0;
 
   textoTurno.setText('Ingresa jugadores');
-  textoTurno.setColor('#c8c8dc');
+  textoTurno.setColor(colorTema('textoSecundario'));
   textoTurnoJugador.setText('');
   textoResultado.setText('');
   textoDetalleResultado.setText('');
-  textoResultado.setColor('#ffd36a');
+  textoResultado.setColor(colorTema('acento'));
 
   mostrarBoton(botonGirar, fondoBotonGirar, false);
   botonGirar.disableInteractive();
@@ -680,7 +853,7 @@ function reiniciarPartidaActual() {
   actualizarTextoTurno();
   textoResultado.setText('');
   textoDetalleResultado.setText('');
-  textoResultado.setColor('#ffd36a');
+  textoResultado.setColor(colorTema('acento'));
 
   mostrarBoton(botonReiniciar, fondoBotonReiniciar, false);
   mostrarBoton(botonNuevoJuego, fondoBotonNuevoJuego, true);
@@ -728,7 +901,7 @@ function moverEnOcho(scene) {
 function girarPirinola(scene) {
   botonGirar.disableInteractive();
   textoResultado.setText('');
-  textoResultado.setColor('#36d6c9');
+  textoResultado.setColor(colorTema('principal'));
   textoDetalleResultado.setText('');
   mostrarBoton(botonGirar, fondoBotonGirar, false);
 
@@ -803,7 +976,7 @@ function siguienteJugador(scene) {
 
   textoResultado.setText('');
   textoDetalleResultado.setText('');
-  textoResultado.setColor('#ffd36a');
+  textoResultado.setColor(colorTema('acento'));
 
   mostrarBoton(botonSiguiente, fondoBotonSiguiente, false);
   botonGirar.setText('GIRAR');
@@ -922,7 +1095,7 @@ function animarFeedbackJugada(scene, resultado, mesaAntes, puntosAntes) {
   });
 
   if (mesa !== mesaAntes && textoMesa) {
-    animarPulsoTexto(scene, textoMesa, '#ffffff');
+    animarPulsoTexto(scene, textoMesa, colorTema('texto'));
   }
 
   if (resultado === 'Toma Todo' && mesaAntes > 0) {
@@ -942,22 +1115,22 @@ function animarFeedbackJugada(scene, resultado, mesaAntes, puntosAntes) {
 
 function obtenerColorResultado(resultado, mesaAntes) {
   if (mesaAntes <= 0 && resultado.indexOf('Toma') === 0) {
-    return '#ff8f8f';
+    return colorTema('error');
   }
 
   if (resultado === 'Toma Todo') {
-    return '#75f0a5';
+    return colorTema('exito');
   }
 
   if (resultado.indexOf('Toma') === 0) {
-    return '#9fffd0';
+    return colorTema('exito');
   }
 
   if (resultado.indexOf('Pon') === 0 || resultado === 'Todos Ponen') {
-    return '#ffb36a';
+    return colorTema('acento');
   }
 
-  return '#ffd36a';
+  return colorTema('acento');
 }
 
 function animarPulsoTexto(scene, texto, colorTemporal) {
@@ -980,7 +1153,7 @@ function animarPulsoTexto(scene, texto, colorTemporal) {
 function mostrarEliminados(scene, puntosAntes) {
   for (let i = 0; i < puntos.length; i++) {
     if (puntosAntes[i] > 0 && puntos[i] <= 0) {
-      mostrarMensajeFlotante(scene, `${jugadores[i]} queda fuera`, 195, 505, '#ff8f8f');
+      mostrarMensajeFlotante(scene, `${jugadores[i]} queda fuera`, 195, 505, colorTema('error'));
     }
   }
 }
@@ -1011,9 +1184,9 @@ function actualizarMarcador() {
 
   if (marcadorPanel) {
     marcadorPanel.clear();
-    marcadorPanel.fillStyle(0x0b1028, 0.88);
+    marcadorPanel.fillStyle(colorNumero('panel'), 0.88);
     marcadorPanel.fillRoundedRect(28, 492, 334, 124, 14);
-    marcadorPanel.lineStyle(2, 0x333a5c, 1);
+    marcadorPanel.lineStyle(2, colorNumero('panelBorde'), 1);
     marcadorPanel.strokeRoundedRect(28, 492, 334, 124, 14);
   }
 
@@ -1031,9 +1204,9 @@ function actualizarMarcador() {
     );
 
     textosJugadores[i].setStyle({
-      fontFamily: 'Courier New',
+      fontFamily: fuenteTema(),
       fontSize: activo && !eliminado ? '18px' : '16px',
-      color: esGanador ? '#ffd36a' : eliminado ? '#ff8f8f' : activo ? '#36d6c9' : '#ffffff',
+      color: esGanador ? colorTema('acento') : eliminado ? colorTema('error') : activo ? colorTema('principal') : colorTema('texto'),
       fontStyle: activo && !eliminado || esGanador ? 'bold' : 'normal'
     });
 
@@ -1091,7 +1264,7 @@ function revisarFinDePartida(scene) {
     textoTurnoJugador.setText('');
     textoTurno.setText('FIN DE LA PARTIDA');
     textoResultado.setText(`${formatearNombreUI(ganador, maximoCaracteresNombre).toUpperCase()} GANA`);
-    textoResultado.setColor('#ffd36a');
+    textoResultado.setColor(colorTema('acento'));
     textoDetalleResultado.setText(textoDetalleResultado.text || 'Partida terminada');
     actualizarMarcador();
     lanzarConfeti(scene);
@@ -1107,7 +1280,7 @@ function revisarFinDePartida(scene) {
 
 function animarVictoria(scene) {
   scene.cameras.main.flash(220, 255, 211, 106);
-  textoTurno.setColor('#75f0a5');
+  textoTurno.setColor(colorTema('exito'));
   textoTurno.setScale(0.9);
 
   scene.tweens.add({
@@ -1118,13 +1291,13 @@ function animarVictoria(scene) {
     ease: 'Back.easeOut',
     onComplete: () => {
       textoTurno.setScale(1);
-      textoTurno.setColor('#c8c8dc');
+      textoTurno.setColor(colorTema('textoSecundario'));
     }
   });
 }
 
 function lanzarConfeti(scene) {
-  const colores = [0xffd36a, 0x36d6c9, 0xffffff, 0x75f0a5];
+  const colores = [colorNumero('acento'), colorNumero('principal'), colorNumero('texto'), colorNumero('exito')];
 
   for (let i = 0; i < 34; i++) {
     const angulo = Phaser.Math.FloatBetween(0, Math.PI * 2);
