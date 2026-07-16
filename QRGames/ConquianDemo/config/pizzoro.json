@@ -1,0 +1,49 @@
+{
+  "marca": "Pizzoro",
+  "titulo": "PIZZORO",
+  "subtituloInicio": "Mientras llega tu pizza... jueguen en familia",
+  "footer": "PIZZORO x QR Games",
+  "textos": {
+    "seccionJugadores": "¿Quienes juegan?",
+    "rangoJugadores": "De 2 a 4 personas",
+    "seccionNombres": "Escriban sus nombres",
+    "botonCrear": "¡A JUGAR!"
+  },
+  "maximoCaracteresNombre": 11,
+  "colores": {
+    "fondo": "#fff1d8",
+    "fondoInicioA": "#fff7e8",
+    "fondoInicioB": "#f8ead0",
+    "fondoInicioC": "#f0d9b4",
+    "panel": "#fff4dc",
+    "panelBorde": "#b32020",
+    "principal": "#1f6a47",
+    "acento": "#c51f22",
+    "texto": "#3a1f10",
+    "textoSecundario": "#6b4a33",
+    "textoOscuro": "#fff8eb",
+    "error": "#c51f22",
+    "exito": "#1f6a47"
+  },
+  "fuentes": {
+    "titulo": "Georgia",
+    "texto": "Georgia"
+  },
+  "imagenes": {
+    "logoInicio": {
+      "src": "",
+      "maxWidth": 240,
+      "maxHeight": 100
+    },
+    "fondoInicio": {
+      "src": "",
+      "mode": "cover",
+      "alpha": 1
+    },
+    "fondoJuego": {
+      "src": "",
+      "mode": "cover",
+      "alpha": 0.25
+    }
+  }
+}
