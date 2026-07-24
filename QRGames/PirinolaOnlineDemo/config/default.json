@@ -1,0 +1,49 @@
+{
+  "marca": "Nerisa Tech",
+  "titulo": "Pirinola Pocket",
+  "subtituloInicio": "Crea una mesa para jugar",
+  "footer": "QR Games by Nerisa Tech",
+  "textos": {
+    "seccionJugadores": "Jugadores",
+    "rangoJugadores": "Maximo 4 jugadores",
+    "seccionNombres": "Nombres",
+    "botonCrear": "CREAR MESA"
+  },
+  "maximoCaracteresNombre": 11,
+  "colores": {
+    "fondo": "#16162a",
+    "fondoInicioA": "#121735",
+    "fondoInicioB": "#070b20",
+    "fondoInicioC": "#030615",
+    "panel": "#0b1028",
+    "panelBorde": "#333a5c",
+    "principal": "#36d6c9",
+    "acento": "#ffd36a",
+    "texto": "#ffffff",
+    "textoSecundario": "#c8c8dc",
+    "textoOscuro": "#101020",
+    "error": "#ff8f8f",
+    "exito": "#75f0a5"
+  },
+  "fuentes": {
+    "titulo": "Courier New",
+    "texto": "Courier New"
+  },
+  "imagenes": {
+    "logoInicio": {
+      "src": "",
+      "maxWidth": 220,
+      "maxHeight": 90
+    },
+    "fondoInicio": {
+      "src": "",
+      "mode": "cover",
+      "alpha": 1
+    },
+    "fondoJuego": {
+      "src": "",
+      "mode": "cover",
+      "alpha": 0.35
+    }
+  }
+}

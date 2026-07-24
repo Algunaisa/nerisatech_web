@@ -1,0 +1,16 @@
+{
+  "name": "pirinola-online-demo",
+  "version": "1.0.0",
+  "description": "Servidor Socket.IO para la versión multijugador de Pirinola",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.0",
+    "socket.io": "^4.1.57"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.8.3"
+  }
+}
