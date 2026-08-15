@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro de Empleados</title>
+    <style>
+      :root {
+        --bg: #f3f7ff;
+        --primary: #1d4ed8;
+        --success: #16a34a;
+        --danger: #dc2626;
+        --text: #111827;
+        --muted: #6b7280;
+        --card: #ffffff;
+        --shadow: 0 12px 32px rgba(17, 24, 39, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(180deg, #dfeaff 0%, #f6f9ff 100%);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 24px;
+      }
+
+      .phone-shell {
+        width: 100%;
+        max-width: 430px;
+        min-height: 760px;
+        background: var(--bg);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+        border: 8px solid #dfe6f8;
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, var(--primary), #2563eb);
+        color: white;
+        padding: 20px 20px 16px;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+
+      .header p {
+        margin: 6px 0 0;
+        font-size: 0.9rem;
+        opacity: 0.92;
+      }
+
+      .content {
+        padding: 18px 18px 22px;
+      }
+
+      .employee-card {
+        background: var(--card);
+        border-radius: 18px;
+        padding: 18px 16px;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
+        margin-bottom: 18px;
+      }
+
+      .label {
+        color: var(--muted);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      .employee-id {
+        font-size: clamp(1.7rem, 5vw, 2.1rem);
+        font-weight: 700;
+        margin: 8px 0 4px;
+      }
+
+      .status-text {
+        font-size: 0.9rem;
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .action-btn {
+        border: none;
+        border-radius: 18px;
+        min-height: 122px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      .action-btn:active {
+        transform: scale(0.98);
+      }
+
+      .action-btn.entrada {
+        background: linear-gradient(180deg, var(--success), #15803d);
+      }
+
+      .action-btn.salida {
+        background: linear-gradient(180deg, var(--danger), #b91c1c);
+      }
+
+      .info-box,
+      .history-box {
+        background: var(--card);
+        border-radius: 18px;
+        padding: 14px 16px;
+        box-shadow: 0 10px 24px rgba(17, 24, 39, 0.06);
+        margin-bottom: 18px;
+      }
+
+      .info-box h3,
+      .history-box h3 {
+        margin: 0 0 10px;
+        font-size: 1rem;
+      }
+
+      .location-text {
+        color: var(--text);
+        font-size: 0.92rem;
+        line-height: 1.5;
+        word-break: break-word;
+      }
+
+      .history-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .export-btn {
+        border: none;
+        background: #111827;
+        color: white;
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.72rem;
+      }
+
+      th,
+      td {
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 8px 2px;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .empty-state {
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin: 8px 0 0;
+      }
+
+      @media (max-width: 420px) {
+        body {
+          padding: 8px;
+        }
+
+        .phone-shell {
+          border-radius: 20px;
+          min-height: auto;
+        }
+
+        .actions {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="phone-shell">
+      <header class="header">
+        <h1>Registro de marca</h1>
+        <p>Control de entradas y salidas</p>
+      </header>
+
+      <section class="content">
+        <div class="employee-card">
+          <div class="label">Empleado</div>
+          <div class="employee-id" id="employeeId">Cargando...</div>
+          <div class="status-text" id="statusText">Listo para registrar</div>
+        </div>
+
+        <div class="actions">
+          <button class="action-btn entrada" data-type="entrada">ENTRADA</button>
+          <button class="action-btn salida" data-type="salida">SALIDA</button>
+        </div>
+
+        <div class="info-box">
+          <h3>Ubicación actual</h3>
+          <div class="location-text" id="locationText">Solicitando ubicación...</div>
+        </div>
+
+        <div class="history-box">
+          <div class="history-head">
+            <h3>Historial</h3>
+            <button id="exportBtn" class="export-btn">Guardar Excel</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+              </tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+          <p id="emptyState" class="empty-state">Aun no hay registros.</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script>
+      const employeeId = new URLSearchParams(window.location.search).get("id") || "SIN_ID";
+      const employeeIdElement = document.getElementById("employeeId");
+      const statusTextElement = document.getElementById("statusText");
+      const locationText = document.getElementById("locationText");
+      const historyBody = document.getElementById("historyBody");
+      const emptyState = document.getElementById("emptyState");
+      const exportBtn = document.getElementById("exportBtn");
+      const STORAGE_KEY = "registro_empleados_historial";
+      let currentLocation = {
+        lat: null,
+        lng: null,
+        accuracy: null,
+        label: "Ubicación no disponible"
+      };
+
+      employeeIdElement.textContent = employeeId;
+
+      function getEmployeeRecords() {
+        try {
+          const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+          return stored.filter((item) => item.idEmpleado === employeeId);
+        } catch (error) {
+          console.error("Error al leer historial:", error);
+          return [];
+        }
+      }
+
+      function saveEmployeeRecords(records) {
+        const allRecords = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        const filtered = allRecords.filter((item) => item.idEmpleado !== employeeId);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...filtered, ...records]));
+      }
+
+      function renderHistory() {
+        const records = getEmployeeRecords();
+        historyBody.innerHTML = "";
+
+        if (records.length === 0) {
+          emptyState.style.display = "block";
+          return;
+        }
+
+        emptyState.style.display = "none";
+
+        records
+          .slice()
+          .reverse()
+          .forEach((item) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${item.tipo}</td>
+              <td>${item.fecha}</td>
+              <td>${item.hora}</td>
+            `;
+            historyBody.appendChild(row);
+          });
+      }
+
+      function setLocationText(message) {
+        locationText.textContent = message;
+      }
+
+      function getCurrentLocation() {
+        if (!navigator.geolocation) {
+          currentLocation.label = "Geolocalización no soportada por este navegador.";
+          setLocationText(currentLocation.label);
+          return;
+        }
+
+        setLocationText("Solicitando ubicación...");
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            currentLocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+              accuracy: position.coords.accuracy,
+              label: `Lat: ${position.coords.latitude.toFixed(5)}, Lng: ${position.coords.longitude.toFixed(5)} (±${Math.round(position.coords.accuracy)}m)`
+            };
+            setLocationText(currentLocation.label);
+          },
+          (error) => {
+            console.error("Error de geolocalización:", error);
+            currentLocation.label = "No se pudo obtener la ubicación. Verifica permisos de GPS.";
+            setLocationText(currentLocation.label);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
+          }
+        );
+      }
+
+      function registrarMarcacion(tipo) {
+        const ahora = new Date();
+        const nuevoRegistro = {
+          idEmpleado: employeeId,
+          tipo: tipo === "entrada" ? "ENTRADA" : "SALIDA",
+          fecha: ahora.toLocaleDateString("es-ES"),
+          hora: ahora.toLocaleTimeString("es-ES", { hour12: false }),
+          fechaHora: ahora.toISOString(),
+          ubicacion: currentLocation.label,
+          latitud: currentLocation.lat,
+          longitud: currentLocation.lng,
+          precision: currentLocation.accuracy
+        };
+
+        const registros = getEmployeeRecords();
+        registros.push(nuevoRegistro);
+        saveEmployeeRecords(registros);
+        renderHistory();
+
+        statusTextElement.textContent = `Registro de ${tipo === "entrada" ? "entrada" : "salida"} guardado`;
+      }
+
+      document.querySelectorAll(".action-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          const tipo = button.dataset.type;
+          registrarMarcacion(tipo);
+        });
+      });
+
+      exportBtn.addEventListener("click", () => {
+        const records = getEmployeeRecords();
+
+        if (!records.length) {
+          alert("No hay registros para exportar.");
+          return;
+        }
+
+        const sheetData = records.map((item) => ({
+          ID_Empleado: item.idEmpleado,
+          Tipo: item.tipo,
+          Fecha: item.fecha,
+          Hora: item.hora,
+          Fecha_Hora_ISO: item.fechaHora,
+          Ubicacion: item.ubicacion,
+          Latitud: item.latitud ?? "",
+          Longitud: item.longitud ?? "",
+          Precision_m: item.precision ?? ""
+        }));
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.json_to_sheet(sheetData);
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Historial");
+        XLSX.writeFile(workbook, `historial_empleado_${employeeId}.xlsx`);
+      });
+
+      getCurrentLocation();
+      renderHistory();
+    </script>
+  </body>
+</html>
