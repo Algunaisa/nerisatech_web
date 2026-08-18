@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+  <!--
+    Archivo: index.html
+    Propósito: Interfaz ligera para registrar entradas y salidas de empleados.
+    - Obtiene el ID del empleado desde la query string (?id=...)
+    - Solicita la geolocalización del navegador
+    - Guarda el historial en localStorage
+    - Permite exportar el historial a Excel usando la librería xlsx
+  -->
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,6 +22,7 @@
 
     <title>Registro de Empleados</title>
     <style>
+      /* Estilos principales: diseño tipo smartphone en el centro */
       :root {
         --bg: #f3f7ff;
         --primary: #1d4ed8;
@@ -219,6 +228,7 @@
   </head>
   <body>
     <main class="phone-shell">
+      <!-- Cabecera con título y subtítulo -->
       <header class="header">
         <h1>Registro de marca</h1>
         <p>Control de entradas y salidas</p>
@@ -226,18 +236,21 @@
 
       <section class="content">
         <div class="employee-card">
+          <!-- Tarjeta que muestra el ID del empleado y el estado del registro -->
           <div class="label">Empleado</div>
           <div class="employee-id" id="employeeId">Cargando...</div>
           <div class="status-text" id="statusText">Listo para registrar</div>
         </div>
 
         <div class="actions">
+          <!-- Botones principales para marcar ENTRADA o SALIDA -->
           <button class="action-btn entrada" data-type="entrada">ENTRADA</button>
           <button class="action-btn salida" data-type="salida">SALIDA</button>
         </div>
 
         <div class="info-box">
           <h3>Ubicación actual</h3>
+          <!-- Aquí se muestra la ubicación (lat/lng y precisión) -->
           <div class="location-text" id="locationText">Solicitando ubicación...</div>
         </div>
 
@@ -263,6 +276,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script>
+      // --- Variables y elementos del DOM ---
+      // `employeeId` proviene de la query string: ?id=123
       const employeeId = new URLSearchParams(window.location.search).get("id") || "SIN_ID";
       const employeeIdElement = document.getElementById("employeeId");
       const statusTextElement = document.getElementById("statusText");
@@ -271,6 +286,8 @@
       const emptyState = document.getElementById("emptyState");
       const exportBtn = document.getElementById("exportBtn");
       const STORAGE_KEY = "registro_empleados_historial";
+
+      // Estado local de la ubicación actual
       let currentLocation = {
         lat: null,
         lng: null,
@@ -278,8 +295,13 @@
         label: "Ubicación no disponible"
       };
 
+      // Mostrar el ID en la interfaz
       employeeIdElement.textContent = employeeId;
 
+      /**
+       * getEmployeeRecords
+       * - Lee todos los registros desde localStorage y devuelve solo los del empleado actual
+       */
       function getEmployeeRecords() {
         try {
           const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -290,12 +312,20 @@
         }
       }
 
+      /**
+       * saveEmployeeRecords(records)
+       * - Reemplaza los registros del empleado actual en el array global y persiste en localStorage
+       */
       function saveEmployeeRecords(records) {
         const allRecords = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
         const filtered = allRecords.filter((item) => item.idEmpleado !== employeeId);
         localStorage.setItem(STORAGE_KEY, JSON.stringify([...filtered, ...records]));
       }
 
+      /**
+       * renderHistory
+       * - Dibuja la tabla con el historial de registros del empleado
+       */
       function renderHistory() {
         const records = getEmployeeRecords();
         historyBody.innerHTML = "";
@@ -307,6 +337,7 @@
 
         emptyState.style.display = "none";
 
+        // Mostrar en orden descendente (más reciente arriba)
         records
           .slice()
           .reverse()
@@ -321,10 +352,16 @@
           });
       }
 
+      // Helper para actualizar el texto de ubicación en pantalla
       function setLocationText(message) {
         locationText.textContent = message;
       }
 
+      /**
+       * getCurrentLocation
+       * - Solicita la ubicación al navegador y actualiza `currentLocation`
+       * - Maneja permisos y errores mostrando mensajes adecuados
+       */
       function getCurrentLocation() {
         if (!navigator.geolocation) {
           currentLocation.label = "Geolocalización no soportada por este navegador.";
@@ -357,6 +394,10 @@
         );
       }
 
+      /**
+       * registrarMarcacion(tipo)
+       * - Crea un nuevo registro (ENTRADA/SALIDA) y lo persiste
+       */
       function registrarMarcacion(tipo) {
         const ahora = new Date();
         const nuevoRegistro = {
@@ -379,6 +420,7 @@
         statusTextElement.textContent = `Registro de ${tipo === "entrada" ? "entrada" : "salida"} guardado`;
       }
 
+      // Asociar eventos a los botones de ENTRADA / SALIDA
       document.querySelectorAll(".action-btn").forEach((button) => {
         button.addEventListener("click", () => {
           const tipo = button.dataset.type;
@@ -386,6 +428,7 @@
         });
       });
 
+      // Exportar los registros del empleado a un archivo Excel usando xlsx
       exportBtn.addEventListener("click", () => {
         const records = getEmployeeRecords();
 
@@ -412,6 +455,7 @@
         XLSX.writeFile(workbook, `historial_empleado_${employeeId}.xlsx`);
       });
 
+      // Inicialización: obtener ubicación y mostrar historial existente
       getCurrentLocation();
       renderHistory();
     </script>
