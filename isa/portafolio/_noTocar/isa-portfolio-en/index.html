@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Isabel Flores — Software Developer and Gameplay Programmer. Portfolio featuring Unity games, web multiplayer projects, and professional software engineering experience." />
+  <title>Isabel Flores — Software & Gameplay Developer</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-soft: #121a2e;
+      --panel: rgba(255,255,255,.055);
+      --panel-strong: rgba(255,255,255,.09);
+      --text: #f7f8fb;
+      --muted: #aeb8cc;
+      --line: rgba(255,255,255,.12);
+      --accent: #7c9cff;
+      --accent-2: #66e0c2;
+      --shadow: 0 18px 60px rgba(0,0,0,.28);
+      --radius: 22px;
+      --max: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(124,156,255,.16), transparent 30%),
+        radial-gradient(circle at 90% 18%, rgba(102,224,194,.10), transparent 28%),
+        var(--bg);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .wrap { width: min(calc(100% - 32px), var(--max)); margin: 0 auto; }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(16px);
+      background: rgba(11,16,32,.72);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .nav-inner {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand { font-weight: 800; letter-spacing: .02em; }
+    .brand span { color: var(--accent-2); }
+
+    .nav-links { display: flex; gap: 18px; flex-wrap: wrap; }
+    .nav-links a { color: var(--muted); font-size: .95rem; }
+    .nav-links a:hover { color: var(--text); }
+
+    header { padding: 96px 0 56px; }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 42px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--accent-2);
+      font-size: .88rem;
+      font-weight: 700;
+      letter-spacing: .03em;
+      margin-bottom: 18px;
+      background: rgba(255,255,255,.03);
+    }
+
+    h1 {
+      font-size: clamp(3rem, 7vw, 6.2rem);
+      line-height: .98;
+      margin: 0;
+      letter-spacing: -.055em;
+    }
+
+    .hero h2 {
+      margin: 18px 0 0;
+      font-size: clamp(1.1rem, 2.8vw, 1.7rem);
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .hero p {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin: 24px 0 0;
+    }
+
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 17px;
+      border-radius: 13px;
+      border: 1px solid var(--line);
+      font-weight: 700;
+      transition: .2s ease;
+    }
+    .btn.primary { background: var(--text); color: #0b1020; border-color: transparent; }
+    .btn.secondary { background: rgba(255,255,255,.035); }
+    .btn:hover { transform: translateY(-2px); }
+
+    .hero-card {
+      padding: 28px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.035));
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+    .hero-card .label { color: var(--muted); text-transform: uppercase; font-size: .8rem; letter-spacing: .14em; font-weight: 800; }
+    .stack { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
+    .chip {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.09);
+      color: #dbe3f3;
+      font-size: .86rem;
+    }
+
+    section { padding: 70px 0; }
+    .section-title { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+    .section-title h3 { margin: 0; font-size: clamp(2rem, 4vw, 3.4rem); letter-spacing: -.04em; }
+    .section-title p { margin: 0; max-width: 560px; color: var(--muted); }
+
+    .featured {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 24px;
+      padding: 30px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(124,156,255,.11), rgba(102,224,194,.055));
+      box-shadow: var(--shadow);
+    }
+    .featured h4 { font-size: 2rem; margin: 0 0 10px; }
+    .featured p { color: var(--muted); margin: 0; }
+    .featured .status { color: var(--accent-2); font-weight: 800; font-size: .9rem; margin-bottom: 8px; }
+
+    .project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+    .card {
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+    }
+    .card:hover { background: var(--panel-strong); }
+    .project-image { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 14px; border: 1px solid var(--line); margin-bottom: 18px; display: block; }
+    .card .meta { color: var(--accent-2); font-size: .85rem; font-weight: 800; letter-spacing: .03em; }
+    .card h4 { font-size: 1.55rem; margin: 8px 0 10px; }
+    .card p { color: var(--muted); margin: 0; }
+    .card ul { color: var(--muted); padding-left: 20px; margin-bottom: 0; }
+
+    .exp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+    .exp-card { padding: 26px; border-top: 1px solid var(--line); }
+    .exp-card h4 { margin: 0 0 4px; font-size: 1.35rem; }
+    .exp-card .role { color: var(--accent-2); font-weight: 700; }
+    .exp-card .date { color: var(--muted); font-size: .93rem; }
+    .exp-card p { color: var(--muted); }
+
+    .about {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: 38px;
+      align-items: start;
+    }
+    .about p { color: var(--muted); margin-top: 0; }
+
+    footer {
+      padding: 56px 0 70px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+    }
+    .footer-inner { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    .small-note { font-size: .88rem; color: #8995aa; margin-top: 14px; }
+
+    @media (max-width: 840px) {
+      .hero, .featured, .about, .project-grid, .exp-grid { grid-template-columns: 1fr; }
+      header { padding-top: 66px; }
+      .nav-links { display: none; }
+      .hero-card { padding: 22px; }
+      section { padding: 52px 0; }
+      .section-title { align-items: start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="wrap nav-inner">
+      <a href="#top" class="brand">Isa<span>.</span></a>
+      <div class="nav-links">
+        <a href="#work">Work</a>
+        <a href="#games">Games</a>
+        <a href="#experience">Experience</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <header>
+      <div class="wrap hero">
+        <div>
+          <div class="eyebrow">Software Developer · Gameplay Programmer</div>
+          <h1>Isabel Flores</h1>
+          <h2>I build software systems, gameplay mechanics and web-based game experiences.</h2>
+          <p>
+            Software developer with professional experience in .NET, databases and web services, with a growing focus on gameplay programming. I enjoy turning ideas into working systems, prototyping quickly, integrating team contributions and refining game logic until it feels coherent and reliable.
+          </p>
+          <div class="actions">
+            <a class="btn primary" href="#work">View featured work</a>
+            <a class="btn secondary" href="https://github.com/Algunaisa" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="btn secondary" href="https://www.linkedin.com/in/algunaisa/" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a class="btn secondary" href="https://isamov3k.itch.io" target="_blank" rel="noreferrer">itch.io</a>
+          </div>
+        </div>
+
+        <aside class="hero-card" aria-label="Technology stack">
+          <div class="label">Core stack</div>
+          <div class="stack">
+            <span class="chip">Unity</span>
+            <span class="chip">C#</span>
+            <span class="chip">JavaScript</span>
+            <span class="chip">TypeScript</span>
+            <span class="chip">Phaser</span>
+            <span class="chip">Colyseus</span>
+            <span class="chip">.NET</span>
+            <span class="chip">SQL</span>
+            <span class="chip">REST / SOAP</span>
+          </div>
+          <p class="small-note">Based in Guadalajara, Mexico · Open to remote opportunities.</p>
+        </aside>
+      </div>
+    </header>
+
+    <section id="work">
+      <div class="wrap">
+        <div class="section-title">
+          <h3>Featured work</h3>
+          <p>A mix of gameplay programming, multiplayer web experimentation and production-oriented software engineering.</p>
+        </div>
+
+        <article class="featured">
+          <div>
+            <img class="project-image" src="pirinola-pocket.png" alt="Pirinola Pocket gameplay screenshot" />
+            <div class="status">CURRENTLY BUILDING</div>
+            <h4>QRGames</h4>
+            <p>
+              A web-based game concept designed for instant access from mobile devices through QR codes. I am exploring lightweight multiplayer experiences, shared game state, turn-based interactions and browser-first game delivery using Phaser and Colyseus.
+            </p>
+            <div class="stack">
+              <span class="chip">Phaser</span>
+              <span class="chip">JavaScript / TypeScript</span>
+              <span class="chip">Colyseus</span>
+              <span class="chip">Multiplayer</span>
+              <span class="chip">Web Games</span>
+            </div>
+            <div class="actions">
+              <a class="btn primary" href="https://nerisatech.com/QRGames/PirinolaDemo/index.html" target="_blank" rel="noreferrer">Play Pirinola Demo</a>
+              <a class="btn secondary" href="https://nerisatech.com/" target="_blank" rel="noreferrer">Nerisa Tech</a>
+            </div>
+          </div>
+          <div>
+            <p><strong>What I am focusing on:</strong></p>
+            <ul>
+              <li>Game-state design and turn management</li>
+              <li>Player sessions and browser-based multiplayer</li>
+              <li>Separating gameplay logic from presentation</li>
+              <li>Fast access without app installation</li>
+              <li>Reusable game systems for branded experiences</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="games">
+      <div class="wrap">
+        <div class="section-title">
+          <h3>Games</h3>
+          <p>Playable projects where I worked directly on gameplay systems, integration and production.</p>
+        </div>
+
+        <div class="project-grid">
+          <article class="card">
+            <img class="project-image" src="rupestralia.png" alt="Rupestralia gameplay screenshot" />
+            <div class="meta">UNITY · GAMEPLAY PROGRAMMING · PRODUCTION</div>
+            <h4>Rupestralia</h4>
+            <p>
+              A 2D game created for the Mini Game Work Jam: Conservación del Patrimonio Gráfico Rupestre. I worked on player movement, collisions, UI, game states, inventory and scene management, while also coordinating participants, making production decisions and integrating the final build.
+            </p>
+            <ul>
+              <li>Gameplay programming and system integration</li>
+              <li>Inventory and scene management</li>
+              <li>UI and game-state logic</li>
+              <li>Integrated enemy systems created by other programmers and validated their behavior in the final levels</li>
+              <li>Team coordination and production decisions</li>
+            </ul>
+            <div class="actions">
+              <a class="btn primary" href="https://isamov3k.itch.io/rupestralia" target="_blank" rel="noreferrer">Play on itch.io</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <img class="project-image" src="space-roses-delivery.png" alt="Space Roses Delivery gameplay screenshot" />
+            <div class="meta">UNITY · GAMEPLAY PROGRAMMING</div>
+            <h4>Space Roses Delivery</h4>
+            <p>
+              A small 2D delivery game developed with my sister. I was responsible for programming and gameplay implementation in Unity, while she created the visual assets.
+            </p>
+            <ul>
+              <li>Player movement</li>
+              <li>Collision handling</li>
+              <li>User interface</li>
+              <li>Game-state logic</li>
+              <li>Gameplay implementation in Unity / C#</li>
+            </ul>
+            <div class="actions">
+              <a class="btn primary" href="https://isamov3k.itch.io/spaceroses-delivery" target="_blank" rel="noreferrer">Play on itch.io</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="wrap">
+        <div class="section-title">
+          <h3>Software engineering experience</h3>
+          <p>My professional background gives me a strong foundation in maintainable software, data integration, internal tools and production systems.</p>
+        </div>
+
+        <div class="exp-grid">
+          <article class="exp-card">
+            <h4>Bansí</h4>
+            <div class="role">.NET Developer</div>
+            <div class="date">Nov 2024 — Present</div>
+            <p>
+              Development and maintenance of desktop applications in C#, integration with relational databases, REST APIs and web services, plus refactoring and optimization of existing code.
+            </p>
+          </article>
+
+          <article class="exp-card">
+            <h4>Jabil</h4>
+            <div class="role">Web Development / Quality</div>
+            <div class="date">2021 — 2024</div>
+            <p>
+              Built and maintained internal web tools for Quality processes, created reports for operational decision-making, improved existing systems, gathered requirements and produced documentation.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="wrap about">
+        <div>
+          <div class="eyebrow">About me</div>
+          <h3 style="font-size:clamp(2rem,4vw,3.4rem);margin:0;letter-spacing:-.04em;">Engineering mindset, gameplay curiosity.</h3>
+        </div>
+        <div>
+          <p>
+            I am a software developer based in Guadalajara, Mexico. My professional work has focused on .NET applications, databases, APIs and internal tools, while my personal projects and game jams have given me hands-on experience with Unity, gameplay mechanics, rapid prototyping and collaborative development.
+          </p>
+          <p>
+            I am especially interested in gameplay systems, state-driven logic, multiplayer experiences and the technical integration work that turns separate pieces into a coherent playable product.
+          </p>
+          <p>
+            I also enjoy working with coding agents as part of my development workflow, using them to accelerate implementation while keeping architecture, debugging and technical decisions under my own control.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contact">
+    <div class="wrap footer-inner">
+      <div>
+        <strong style="color:var(--text);">Isabel Flores</strong><br />
+        Software Developer · Gameplay Programmer
+      </div>
+      <div>
+        <div class="actions" style="margin-top:0; margin-bottom:14px;">
+          <a class="btn primary" href="https://wa.me/523314659922?text=Hi%20Isa%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20get%20in%20touch." target="_blank" rel="noreferrer">Message me on WhatsApp</a>
+          <a class="btn secondary" href="mailto:belen.isabel@hotmail.com?subject=Portfolio%20contact">Send me an email</a>
+        </div>
+        <div class="footer-links">
+        <a href="tel:+523314659922">+52 33 1465 9922</a>
+        <a href="https://github.com/Algunaisa" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://isamov3k.itch.io" target="_blank" rel="noreferrer">itch.io</a>
+        <a href="https://www.linkedin.com/in/algunaisa/" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a href="https://nerisatech.com/" target="_blank" rel="noreferrer">Nerisa Tech</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

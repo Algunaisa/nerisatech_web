@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Analítica del portafolio | Isa Flores</title>
+  <style>
+    :root{color-scheme:dark;--bg:#080d1a;--card:#121b30;--line:#2a3859;--text:#f7f8fb;--muted:#aeb8cc;--accent:#66e0c2}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,sans-serif}.wrap{width:min(1200px,calc(100% - 32px));margin:auto;padding:32px 0}h1{margin:0 0 4px}p{color:var(--muted)}button,input{font:inherit}input{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#0b1120;color:var(--text)}button{padding:11px 16px;border:0;border-radius:9px;background:var(--accent);color:#07111b;font-weight:700;cursor:pointer}.login{max-width:390px;margin:12vh auto}.login form{display:grid;gap:12px}.hidden{display:none!important}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:28px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card)}.card strong{font-size:1.7rem;display:block;color:var(--accent)}.wide{grid-column:span 2}table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top}tr[data-session]{cursor:pointer}tr[data-session]:hover{background:#1b2947}.detail{white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:.85rem;max-height:340px;overflow:auto}@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.wide{grid-column:span 2}.wrap{overflow-x:auto}}@media(max-width:480px){.grid{grid-template-columns:1fr}.wide{grid-column:span 1}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section id="loginPanel" class="login"><h1>Analítica privada</h1><p>Acceso exclusivo para el administrador autorizado de Supabase.</p><form id="loginForm"><input id="email" type="email" placeholder="Correo" required autocomplete="email"><input id="password" type="password" placeholder="Contraseña" required autocomplete="current-password"><button>Ingresar</button><p id="loginMessage" role="status"></p></form></section>
+    <section id="dashboard" class="hidden"><div class="toolbar"><div><h1>Analítica del portafolio</h1><p id="updatedAt">Cargando…</p></div><div><button id="refresh">Actualizar</button> <button id="logout">Salir</button></div></div><div id="metrics" class="grid"></div><div class="grid" style="margin-top:14px"><article class="card wide"><h2>Países de origen</h2><div id="countries"></div></article><article class="card wide"><h2>Proyectos y enlaces</h2><div id="projects"></div></article></div><article class="card" style="margin-top:14px"><h2>Sesiones recientes</h2><table><thead><tr><th>Visitante</th><th>Fecha / hora</th><th>País</th><th>Duración activa</th><th>Entrada</th><th>Eventos</th></tr></thead><tbody id="sessions"></tbody></table></article><article class="card" style="margin-top:14px"><h2>Detalle de sesión</h2><div id="detail" class="detail">Selecciona una sesión para consultar sus eventos cronológicamente.</div></article></section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../portafolio/supabase-config.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>
